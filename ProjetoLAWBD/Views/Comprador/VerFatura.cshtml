@@ -1,0 +1,197 @@
+﻿@model ProjetoLAWBD.Models.Compra
+@{
+    ViewData["Title"] = "Fatura " + Model.NumeroFatura;
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8" />
+    <title>Fatura @Model.NumeroFatura</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <style>
+        body {
+            background: #eee;
+            padding: 20px;
+            font-family: 'Segoe UI', sans-serif;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .invoice-container {
+            background: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+
+        .invoice-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .invoice-logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: #212529;
+            letter-spacing: -1px;
+        }
+
+        .table-invoice th {
+            background-color: #f8f9fa;
+            border-top: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .table-invoice td {
+            padding: 15px 10px;
+            vertical-align: middle;
+        }
+
+        /* Classe utilitária para respeitar as quebras de linha da morada */
+        .address-box {
+            white-space: pre-line; /* IMPORTANTE: Transforma \n em <br> */
+            line-height: 1.5;
+            color: #555;
+        }
+
+        @@media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+
+            .invoice-container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+                border-radius: 0;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container text-center mb-4 no-print">
+        <div class="d-flex justify-content-center gap-2">
+            <button onclick="window.print()" class="btn btn-dark shadow-sm">
+                <i class="fas fa-print me-2"></i>Imprimir Fatura
+            </button>
+        </div>
+    </div>
+
+    <div class="invoice-container">
+
+        <div class="row invoice-header">
+            <div class="col-6">
+                <img src="~/icons/website-icon.svg" width="20" height="20" class="mb-2">
+                <br>
+
+                <strong class="fs-5">@(Model.NomeFaturacao ?? "Nome não disponível")</strong>
+
+                <div class="text-muted small mt-2 lh-sm">
+                    <span class="d-block mb-1">
+                        @Model.RuaFaturacao<br>
+                        @Model.CPFaturacao @Model.CidadeFaturacao
+                    </span>
+
+                    <span class="d-block">
+                        <strong>NIF:</strong> @(Model.NIFVendedor ?? "N/A")
+                    </span>
+
+                    @if (!string.IsNullOrEmpty(Model.IBAN)) {
+                        <span class="d-block mt-1">
+                            <strong>IBAN:</strong> @Model.IBAN
+                        </span>
+                    }
+                </div>
+            </div>
+
+            <div class="col-6 text-end">
+                <h4 class="fw-bold mb-0 text-dark">FATURA</h4>
+                <div class="text-muted mb-1">Nº @Model.NumeroFatura</div>
+                <div class="small text-muted">Data de Emissão: @Model.DataCompra.ToString("dd/MM/yyyy")</div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-6">
+                <h6 class="fw-bold text-uppercase small text-secondary mb-2">Vendido Por</h6>
+                <div class="ps-3 border-start border-3 border-dark">
+                    <p class="fw-bold mb-0">@Model.Anuncio.Vendedor.user.NomeCompleto</p>
+                    <small class="text-muted">@Model.Anuncio.Vendedor.TipoVendedor</small>
+                </div>
+            </div>
+
+            <div class="col-6 text-end">
+                <h6 class="fw-bold text-uppercase small text-secondary mb-2">Faturado a</h6>
+
+                <p class="fw-bold mb-1 fs-5">@Model.NomeCompradorSnapshot</p>
+
+                <div class="address-box">@Model.MoradaCompradorSnapshot</div>
+            </div>
+        </div>
+
+        <table class="table table-invoice mb-4">
+            <thead>
+                <tr>
+                    <th style="width: 50%">Descrição</th>
+                    <th class="text-end">Preço Unit.</th>
+                    <th class="text-end">Qtd</th>
+                    <th class="text-end">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="fw-bold text-dark">@Model.Anuncio.Veiculo.Modelo.Marca.Nome @Model.Anuncio.Veiculo.Modelo.Nome</span><br>
+                        <small class="text-muted">
+                            Ano: @Model.Anuncio.Veiculo.DataMatricula.Year
+                        </small>
+                    </td>
+                    <td class="text-end">@Model.ValorTotal.ToString("N2") €</td>
+                    <td class="text-end">1</td>
+                    <td class="text-end fw-bold">@Model.ValorTotal.ToString("N2") €</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="row justify-content-end">
+            <div class="col-5">
+                <table class="table table-borderless">
+                    <tr>
+                        <td class="text-end pb-0">Base Tributável</td>
+                        <td class="text-end pb-0">@Model.ValorTotal.ToString("N2") €</td>
+                    </tr>
+                    <tr class="border-top">
+                        <td class="text-end fs-5 fw-bold pt-3">Total a Pagar</td>
+                        <td class="text-end fs-5 fw-bold pt-3 text-dark">@Model.ValorTotal.ToString("C2")</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-5 pt-4 border-top text-center text-muted small">
+            <p class="mb-1">Processado por computador.</p>
+            <p>Obrigado pela sua preferência.</p>
+        </div>
+    </div>
+
+</body>
+</html>

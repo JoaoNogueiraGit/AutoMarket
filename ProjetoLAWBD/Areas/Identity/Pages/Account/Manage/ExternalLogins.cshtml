@@ -1,0 +1,106 @@
+﻿@page
+@model ExternalLoginsModel
+@{
+    ViewData["Title"] = "Logins Externos";
+    ViewData["ActivePage"] = ManageNavPages.ExternalLogins;
+}
+
+<h3 class="fw-bold mb-1">@ViewData["Title"]</h3>
+<p class="text-muted mb-4">Faça login rapidamente usando as suas contas existentes.</p>
+
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-4 p-md-5">
+
+        @if (Model.CurrentLogins?.Count > 0) {
+            <h5 class="fw-bold mb-3">As suas associações</h5>
+            <div class="table-responsive mb-4">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="w-100">Serviço</th>
+                            <th scope="col" class="text-end">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var login in Model.CurrentLogins) {
+                            <tr>
+                                <td id="@($"login-provider-{login.LoginProvider}")">
+                                    @if (login.ProviderDisplayName == "Google") {
+                                        <i class="fab fa-google text-danger me-2 fa-lg"></i>
+                                        <span class="fw-bold">Google</span>
+                                    }
+                                    else if (login.ProviderDisplayName == "Twitter" || login.ProviderDisplayName == "X") {
+                                        <i class="fab fa-twitter text-dark me-2 fa-lg"></i>
+                                        <span class="fw-bold">X (Twitter)</span>
+                                    }
+                                    else {
+                                        <i class="fas fa-plug text-muted me-2"></i>
+                                        <span class="fw-medium">@login.ProviderDisplayName</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    @if (Model.ShowRemoveButton) {
+                                        <form id="@($"remove-login-{login.LoginProvider}")" asp-page-handler="RemoveLogin" method="post" class="d-inline">
+                                            <div>
+                                                <input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
+                                                <input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Remover este login @login.ProviderDisplayName">
+                                                    <i class="fas fa-unlink me-1"></i> Desassociar
+                                                </button>
+                                            </div>
+                                        </form>
+                                    }
+                                    else {
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success px-3">
+                                            <i class="fas fa-check me-1"></i> Login Principal
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        @if (Model.OtherLogins?.Count > 0) {
+            <hr class="my-4">
+            <h5 class="fw-bold mb-3">Adicionar nova conta</h5>
+            <p class="text-muted small mb-3">Clique num serviço abaixo para o associar à sua conta.</p>
+
+            <form id="link-login-form" asp-page-handler="LinkLogin" method="post" class="form-horizontal">
+                <div id="socialLoginList" class="d-flex flex-wrap gap-3">
+                    @foreach (var provider in Model.OtherLogins) {
+                        // Estilo Específico para GOOGLE
+                        if (provider.Name == "Google") {
+                            <button id="@($"link-login-button-{provider.Name}")" type="submit" class="btn btn-outline-danger btn-lg d-flex align-items-center gap-2 px-4 shadow-sm" name="provider" value="@provider.Name" title="Entrar com Google">
+                                <i class="fab fa-google fa-lg"></i>
+                                <span>Google</span>
+                            </button>
+                        }
+                        // Estilo Específico para TWITTER / X
+                        else if (provider.Name == "Twitter" || provider.DisplayName == "X") {
+                            <button id="@($"link-login-button-{provider.Name}")" type="submit" class="btn btn-dark btn-lg d-flex align-items-center gap-2 px-4 shadow-sm" name="provider" value="@provider.Name" title="Entrar com X">
+                                <i class="fab fa-twitter fa-lg"></i>
+                                <span>X</span>
+                            </button>
+                        }
+                        // Outros (Genérico)
+                        else {
+                            <button id="@($"link-login-button-{provider.Name}")" type="submit" class="btn btn-outline-secondary btn-lg d-flex align-items-center gap-2 px-4" name="provider" value="@provider.Name">
+                                <i class="fas fa-sign-in-alt"></i>
+                                <span>@provider.DisplayName</span>
+                            </button>
+                        }
+                    }
+                </div>
+            </form>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

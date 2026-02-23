@@ -1,0 +1,2088 @@
+[
+  {
+    "id": 1,
+    "name": "Aveiro",
+    "lat": 40.6405,
+    "lng": -8.6538,
+    "type": "distrito"
+  },
+  {
+    "id": 2,
+    "name": "Beja",
+    "lat": 38.0151,
+    "lng": -7.8632,
+    "type": "distrito"
+  },
+  {
+    "id": 3,
+    "name": "Braga",
+    "lat": 41.5454,
+    "lng": -8.4265,
+    "type": "distrito"
+  },
+  {
+    "id": 4,
+    "name": "Bragança",
+    "lat": 41.8061,
+    "lng": -6.7567,
+    "type": "distrito"
+  },
+  {
+    "id": 5,
+    "name": "Castelo Branco",
+    "lat": 39.8197,
+    "lng": -7.4965,
+    "type": "distrito"
+  },
+  {
+    "id": 6,
+    "name": "Coimbra",
+    "lat": 40.2033,
+    "lng": -8.4103,
+    "type": "distrito"
+  },
+  {
+    "id": 7,
+    "name": "Évora",
+    "lat": 38.5714,
+    "lng": -7.9135,
+    "type": "distrito"
+  },
+  {
+    "id": 8,
+    "name": "Faro",
+    "lat": 37.0179,
+    "lng": -7.9308,
+    "type": "distrito"
+  },
+  {
+    "id": 9,
+    "name": "Guarda",
+    "lat": 40.5383,
+    "lng": -7.2661,
+    "type": "distrito"
+  },
+  {
+    "id": 10,
+    "name": "Leiria",
+    "lat": 39.7438,
+    "lng": -8.8070,
+    "type": "distrito"
+  },
+  {
+    "id": 11,
+    "name": "Lisboa",
+    "lat": 38.7223,
+    "lng": -9.1393,
+    "type": "distrito"
+  },
+  {
+    "id": 12,
+    "name": "Portalegre",
+    "lat": 39.2952,
+    "lng": -7.4284,
+    "type": "distrito"
+  },
+  {
+    "id": 13,
+    "name": "Porto",
+    "lat": 41.1579,
+    "lng": -8.6291,
+    "type": "distrito"
+  },
+  {
+    "id": 14,
+    "name": "Santarém",
+    "lat": 39.2333,
+    "lng": -8.6833,
+    "type": "distrito"
+  },
+  {
+    "id": 15,
+    "name": "Setúbal",
+    "lat": 38.5244,
+    "lng": -8.8882,
+    "type": "distrito"
+  },
+  {
+    "id": 16,
+    "name": "Viana do Castelo",
+    "lat": 41.6918,
+    "lng": -8.8345,
+    "type": "distrito"
+  },
+  {
+    "id": 17,
+    "name": "Vila Real",
+    "lat": 41.3004,
+    "lng": -7.7441,
+    "type": "distrito"
+  },
+  {
+    "id": 18,
+    "name": "Viseu",
+    "lat": 40.6566,
+    "lng": -7.9124,
+    "type": "distrito"
+  },
+  {
+    "id": 101,
+    "name": "Águeda",
+    "lat": 40.5745,
+    "lng": -8.4486,
+    "type": "municipio"
+  },
+  {
+    "id": 102,
+    "name": "Albergaria-a-Velha",
+    "lat": 40.6932,
+    "lng": -8.4807,
+    "type": "municipio"
+  },
+  {
+    "id": 103,
+    "name": "Anadia",
+    "lat": 40.4431,
+    "lng": -8.4346,
+    "type": "municipio"
+  },
+  {
+    "id": 104,
+    "name": "Arouca",
+    "lat": 40.9304,
+    "lng": -8.2439,
+    "type": "municipio"
+  },
+  {
+    "id": 105,
+    "name": "Aveiro",
+    "lat": 40.6405,
+    "lng": -8.6538,
+    "type": "municipio"
+  },
+  {
+    "id": 106,
+    "name": "Castelo de Paiva",
+    "lat": 41.0401,
+    "lng": -8.2718,
+    "type": "municipio"
+  },
+  {
+    "id": 107,
+    "name": "Espinho",
+    "lat": 41.0084,
+    "lng": -8.6433,
+    "type": "municipio"
+  },
+  {
+    "id": 108,
+    "name": "Estarreja",
+    "lat": 40.7562,
+    "lng": -8.5684,
+    "type": "municipio"
+  },
+  {
+    "id": 109,
+    "name": "Ílhavo",
+    "lat": 40.6019,
+    "lng": -8.6678,
+    "type": "municipio"
+  },
+  {
+    "id": 110,
+    "name": "Mealhada",
+    "lat": 40.3789,
+    "lng": -8.4526,
+    "type": "municipio"
+  },
+  {
+    "id": 111,
+    "name": "Murtosa",
+    "lat": 40.7424,
+    "lng": -8.6496,
+    "type": "municipio"
+  },
+  {
+    "id": 112,
+    "name": "Oliveira de Azeméis",
+    "lat": 40.8384,
+    "lng": -8.4831,
+    "type": "municipio"
+  },
+  {
+    "id": 113,
+    "name": "Oliveira do Bairro",
+    "lat": 40.5126,
+    "lng": -8.4947,
+    "type": "municipio"
+  },
+  {
+    "id": 114,
+    "name": "Ovar",
+    "lat": 40.8596,
+    "lng": -8.6251,
+    "type": "municipio"
+  },
+  {
+    "id": 115,
+    "name": "Santa Maria da Feira",
+    "lat": 40.9261,
+    "lng": -8.5414,
+    "type": "municipio"
+  },
+  {
+    "id": 116,
+    "name": "São João da Madeira",
+    "lat": 40.9008,
+    "lng": -8.4907,
+    "type": "municipio"
+  },
+  {
+    "id": 117,
+    "name": "Sever do Vouga",
+    "lat": 40.7334,
+    "lng": -8.3713,
+    "type": "municipio"
+  },
+  {
+    "id": 118,
+    "name": "Vagos",
+    "lat": 40.5539,
+    "lng": -8.6816,
+    "type": "municipio"
+  },
+  {
+    "id": 119,
+    "name": "Vale de Cambra",
+    "lat": 40.8504,
+    "lng": -8.3934,
+    "type": "municipio"
+  },
+
+  {
+    "id": 201,
+    "name": "Aljustrel",
+    "lat": 37.9103,
+    "lng": -8.1633,
+    "type": "municipio"
+  },
+  {
+    "id": 202,
+    "name": "Almodôvar",
+    "lat": 37.5126,
+    "lng": -8.0605,
+    "type": "municipio"
+  },
+  {
+    "id": 203,
+    "name": "Alvito",
+    "lat": 38.2571,
+    "lng": -7.9912,
+    "type": "municipio"
+  },
+  {
+    "id": 204,
+    "name": "Barrancos",
+    "lat": 38.1306,
+    "lng": -6.9744,
+    "type": "municipio"
+  },
+  {
+    "id": 205,
+    "name": "Beja",
+    "lat": 38.0151,
+    "lng": -7.8632,
+    "type": "municipio"
+  },
+  {
+    "id": 206,
+    "name": "Castro Verde",
+    "lat": 37.7001,
+    "lng": -8.0833,
+    "type": "municipio"
+  },
+  {
+    "id": 207,
+    "name": "Cuba",
+    "lat": 38.1654,
+    "lng": -7.8913,
+    "type": "municipio"
+  },
+  {
+    "id": 208,
+    "name": "Ferreira do Alentejo",
+    "lat": 38.0581,
+    "lng": -8.1189,
+    "type": "municipio"
+  },
+  {
+    "id": 209,
+    "name": "Mértola",
+    "lat": 37.6393,
+    "lng": -7.6620,
+    "type": "municipio"
+  },
+  {
+    "id": 210,
+    "name": "Moura",
+    "lat": 38.1401,
+    "lng": -7.4506,
+    "type": "municipio"
+  },
+  {
+    "id": 211,
+    "name": "Odemira",
+    "lat": 37.5976,
+    "lng": -8.6430,
+    "type": "municipio"
+  },
+  {
+    "id": 212,
+    "name": "Ourique",
+    "lat": 37.6534,
+    "lng": -8.2255,
+    "type": "municipio"
+  },
+  {
+    "id": 213,
+    "name": "Serpa",
+    "lat": 37.9443,
+    "lng": -7.5969,
+    "type": "municipio"
+  },
+  {
+    "id": 214,
+    "name": "Vidigueira",
+    "lat": 38.2091,
+    "lng": -7.8078,
+    "type": "municipio"
+  },
+
+  {
+    "id": 301,
+    "name": "Amares",
+    "lat": 41.6318,
+    "lng": -8.3517,
+    "type": "municipio"
+  },
+  {
+    "id": 302,
+    "name": "Barcelos",
+    "lat": 41.5388,
+    "lng": -8.6151,
+    "type": "municipio"
+  },
+  {
+    "id": 303,
+    "name": "Braga",
+    "lat": 41.5454,
+    "lng": -8.4265,
+    "type": "municipio"
+  },
+  {
+    "id": 304,
+    "name": "Cabeceiras de Basto",
+    "lat": 41.5126,
+    "lng": -7.9912,
+    "type": "municipio"
+  },
+  {
+    "id": 305,
+    "name": "Celorico de Basto",
+    "lat": 41.3881,
+    "lng": -8.0003,
+    "type": "municipio"
+  },
+  {
+    "id": 306,
+    "name": "Esposende",
+    "lat": 41.5312,
+    "lng": -8.7801,
+    "type": "municipio"
+  },
+  {
+    "id": 307,
+    "name": "Fafe",
+    "lat": 41.4519,
+    "lng": -8.1725,
+    "type": "municipio"
+  },
+  {
+    "id": 308,
+    "name": "Guimarães",
+    "lat": 41.4425,
+    "lng": -8.2918,
+    "type": "municipio"
+  },
+  {
+    "id": 309,
+    "name": "Póvoa de Lanhoso",
+    "lat": 41.5779,
+    "lng": -8.2721,
+    "type": "municipio"
+  },
+  {
+    "id": 310,
+    "name": "Terras de Bouro",
+    "lat": 41.7214,
+    "lng": -8.3073,
+    "type": "municipio"
+  },
+  {
+    "id": 311,
+    "name": "Vieira do Minho",
+    "lat": 41.6338,
+    "lng": -8.1437,
+    "type": "municipio"
+  },
+  {
+    "id": 312,
+    "name": "Vila Nova de Famalicão",
+    "lat": 41.4074,
+    "lng": -8.5173,
+    "type": "municipio"
+  },
+  {
+    "id": 313,
+    "name": "Vila Verde",
+    "lat": 41.6483,
+    "lng": -8.4346,
+    "type": "municipio"
+  },
+  {
+    "id": 314,
+    "name": "Vizela",
+    "lat": 41.3768,
+    "lng": -8.3075,
+    "type": "municipio"
+  },
+
+  {
+    "id": 401,
+    "name": "Alfândega da Fé",
+    "lat": 41.3444,
+    "lng": -6.9619,
+    "type": "municipio"
+  },
+  {
+    "id": 402,
+    "name": "Bragança",
+    "lat": 41.8061,
+    "lng": -6.7567,
+    "type": "municipio"
+  },
+  {
+    "id": 403,
+    "name": "Carrazeda de Ansiães",
+    "lat": 41.2422,
+    "lng": -7.3006,
+    "type": "municipio"
+  },
+  {
+    "id": 404,
+    "name": "Freixo de Espada à Cinta",
+    "lat": 41.0921,
+    "lng": -6.8077,
+    "type": "municipio"
+  },
+  {
+    "id": 405,
+    "name": "Macedo de Cavaleiros",
+    "lat": 41.5377,
+    "lng": -6.9587,
+    "type": "municipio"
+  },
+  {
+    "id": 406,
+    "name": "Miranda do Douro",
+    "lat": 41.4939,
+    "lng": -6.2737,
+    "type": "municipio"
+  },
+  {
+    "id": 407,
+    "name": "Mirandela",
+    "lat": 41.4851,
+    "lng": -7.1887,
+    "type": "municipio"
+  },
+  {
+    "id": 408,
+    "name": "Mogadouro",
+    "lat": 41.3392,
+    "lng": -6.7118,
+    "type": "municipio"
+  },
+  {
+    "id": 409,
+    "name": "Torre de Moncorvo",
+    "lat": 41.1741,
+    "lng": -7.0515,
+    "type": "municipio"
+  },
+  {
+    "id": 410,
+    "name": "Vila Flor",
+    "lat": 41.3075,
+    "lng": -7.1534,
+    "type": "municipio"
+  },
+  {
+    "id": 411,
+    "name": "Vimioso",
+    "lat": 41.5833,
+    "lng": -6.5283,
+    "type": "municipio"
+  },
+  {
+    "id": 412,
+    "name": "Vinhais",
+    "lat": 41.8344,
+    "lng": -7.0003,
+    "type": "municipio"
+  },
+  {
+    "id": 501,
+    "name": "Belmonte",
+    "lat": 40.3582,
+    "lng": -7.3516,
+    "type": "municipio"
+  },
+  {
+    "id": 502,
+    "name": "Castelo Branco",
+    "lat": 39.8197,
+    "lng": -7.4965,
+    "type": "municipio"
+  },
+  {
+    "id": 503,
+    "name": "Covilhã",
+    "lat": 40.2827,
+    "lng": -7.5029,
+    "type": "municipio"
+  },
+  {
+    "id": 504,
+    "name": "Fundão",
+    "lat": 40.1417,
+    "lng": -7.5015,
+    "type": "municipio"
+  },
+  {
+    "id": 505,
+    "name": "Idanha-a-Nova",
+    "lat": 39.9219,
+    "lng": -7.2378,
+    "type": "municipio"
+  },
+  {
+    "id": 506,
+    "name": "Oleiros",
+    "lat": 39.9189,
+    "lng": -7.9130,
+    "type": "municipio"
+  },
+  {
+    "id": 507,
+    "name": "Penamacor",
+    "lat": 40.1691,
+    "lng": -7.1706,
+    "type": "municipio"
+  },
+  {
+    "id": 508,
+    "name": "Proença-a-Nova",
+    "lat": 39.7508,
+    "lng": -7.9234,
+    "type": "municipio"
+  },
+  {
+    "id": 509,
+    "name": "Sertã",
+    "lat": 39.8009,
+    "lng": -8.0999,
+    "type": "municipio"
+  },
+  {
+    "id": 510,
+    "name": "Vila de Rei",
+    "lat": 39.6738,
+    "lng": -8.1444,
+    "type": "municipio"
+  },
+  {
+    "id": 511,
+    "name": "Vila Velha de Ródão",
+    "lat": 39.6508,
+    "lng": -7.6717,
+    "type": "municipio"
+  },
+
+  {
+    "id": 601,
+    "name": "Arganil",
+    "lat": 40.2185,
+    "lng": -8.0526,
+    "type": "municipio"
+  },
+  {
+    "id": 602,
+    "name": "Cantanhede",
+    "lat": 40.3465,
+    "lng": -8.5936,
+    "type": "municipio"
+  },
+  {
+    "id": 603,
+    "name": "Coimbra",
+    "lat": 40.2033,
+    "lng": -8.4103,
+    "type": "municipio"
+  },
+  {
+    "id": 604,
+    "name": "Condeixa-a-Nova",
+    "lat": 40.1118,
+    "lng": -8.4981,
+    "type": "municipio"
+  },
+  {
+    "id": 605,
+    "name": "Figueira da Foz",
+    "lat": 40.1519,
+    "lng": -8.8549,
+    "type": "municipio"
+  },
+  {
+    "id": 606,
+    "name": "Góis",
+    "lat": 40.1558,
+    "lng": -8.1105,
+    "type": "municipio"
+  },
+  {
+    "id": 607,
+    "name": "Lousã",
+    "lat": 40.1114,
+    "lng": -8.2476,
+    "type": "municipio"
+  },
+  {
+    "id": 608,
+    "name": "Mira",
+    "lat": 40.4287,
+    "lng": -8.7369,
+    "type": "municipio"
+  },
+  {
+    "id": 609,
+    "name": "Miranda do Corvo",
+    "lat": 40.0915,
+    "lng": -8.3314,
+    "type": "municipio"
+  },
+  {
+    "id": 610,
+    "name": "Montemor-o-Velho",
+    "lat": 40.1742,
+    "lng": -8.6816,
+    "type": "municipio"
+  },
+  {
+    "id": 611,
+    "name": "Oliveira do Hospital",
+    "lat": 40.3592,
+    "lng": -7.8617,
+    "type": "municipio"
+  },
+  {
+    "id": 612,
+    "name": "Pampilhosa da Serra",
+    "lat": 40.0463,
+    "lng": -7.9472,
+    "type": "municipio"
+  },
+  {
+    "id": 613,
+    "name": "Penacova",
+    "lat": 40.2693,
+    "lng": -8.2828,
+    "type": "municipio"
+  },
+  {
+    "id": 614,
+    "name": "Penela",
+    "lat": 40.0305,
+    "lng": -8.3908,
+    "type": "municipio"
+  },
+  {
+    "id": 615,
+    "name": "Soure",
+    "lat": 40.0601,
+    "lng": -8.6258,
+    "type": "municipio"
+  },
+  {
+    "id": 616,
+    "name": "Tábua",
+    "lat": 40.3620,
+    "lng": -8.0289,
+    "type": "municipio"
+  },
+  {
+    "id": 617,
+    "name": "Vila Nova de Poiares",
+    "lat": 40.2114,
+    "lng": -8.2570,
+    "type": "municipio"
+  },
+
+  {
+    "id": 701,
+    "name": "Alandroal",
+    "lat": 38.7032,
+    "lng": -7.4026,
+    "type": "municipio"
+  },
+  {
+    "id": 702,
+    "name": "Arraiolos",
+    "lat": 38.7238,
+    "lng": -7.9840,
+    "type": "municipio"
+  },
+  {
+    "id": 703,
+    "name": "Borba",
+    "lat": 38.8043,
+    "lng": -7.4578,
+    "type": "municipio"
+  },
+  {
+    "id": 704,
+    "name": "Estremoz",
+    "lat": 38.8415,
+    "lng": -7.5878,
+    "type": "municipio"
+  },
+  {
+    "id": 705,
+    "name": "Évora",
+    "lat": 38.5714,
+    "lng": -7.9135,
+    "type": "municipio"
+  },
+  {
+    "id": 706,
+    "name": "Montemor-o-Novo",
+    "lat": 38.6436,
+    "lng": -8.2140,
+    "type": "municipio"
+  },
+  {
+    "id": 707,
+    "name": "Mora",
+    "lat": 38.9442,
+    "lng": -8.1656,
+    "type": "municipio"
+  },
+  {
+    "id": 708,
+    "name": "Mourão",
+    "lat": 38.3845,
+    "lng": -7.3444,
+    "type": "municipio"
+  },
+  {
+    "id": 709,
+    "name": "Portel",
+    "lat": 38.3079,
+    "lng": -7.7042,
+    "type": "municipio"
+  },
+  {
+    "id": 710,
+    "name": "Redondo",
+    "lat": 38.6483,
+    "lng": -7.5463,
+    "type": "municipio"
+  },
+  {
+    "id": 711,
+    "name": "Reguengos de Monsaraz",
+    "lat": 38.4239,
+    "lng": -7.5342,
+    "type": "municipio"
+  },
+  {
+    "id": 712,
+    "name": "Vendas Novas",
+    "lat": 38.6775,
+    "lng": -8.4550,
+    "type": "municipio"
+  },
+  {
+    "id": 713,
+    "name": "Viana do Alentejo",
+    "lat": 38.3323,
+    "lng": -8.0016,
+    "type": "municipio"
+  },
+  {
+    "id": 714,
+    "name": "Vila Viçosa",
+    "lat": 38.7788,
+    "lng": -7.4172,
+    "type": "municipio"
+  },
+
+  {
+    "id": 801,
+    "name": "Albufeira",
+    "lat": 37.0891,
+    "lng": -8.2519,
+    "type": "municipio"
+  },
+  {
+    "id": 802,
+    "name": "Alcoutim",
+    "lat": 37.4714,
+    "lng": -7.4727,
+    "type": "municipio"
+  },
+  {
+    "id": 803,
+    "name": "Aljezur",
+    "lat": 37.3168,
+    "lng": -8.8029,
+    "type": "municipio"
+  },
+  {
+    "id": 804,
+    "name": "Castro Marim",
+    "lat": 37.2209,
+    "lng": -7.4429,
+    "type": "municipio"
+  },
+  {
+    "id": 805,
+    "name": "Faro",
+    "lat": 37.0179,
+    "lng": -7.9308,
+    "type": "municipio"
+  },
+  {
+    "id": 806,
+    "name": "Lagoa",
+    "lat": 37.1356,
+    "lng": -8.4542,
+    "type": "municipio"
+  },
+  {
+    "id": 807,
+    "name": "Lagos",
+    "lat": 37.1026,
+    "lng": -8.6730,
+    "type": "municipio"
+  },
+  {
+    "id": 808,
+    "name": "Loulé",
+    "lat": 37.1394,
+    "lng": -8.0202,
+    "type": "municipio"
+  },
+  {
+    "id": 809,
+    "name": "Monchique",
+    "lat": 37.3160,
+    "lng": -8.5540,
+    "type": "municipio"
+  },
+  {
+    "id": 810,
+    "name": "Olhão",
+    "lat": 37.0286,
+    "lng": -7.8411,
+    "type": "municipio"
+  },
+  {
+    "id": 811,
+    "name": "Portimão",
+    "lat": 37.1372,
+    "lng": -8.5376,
+    "type": "municipio"
+  },
+  {
+    "id": 812,
+    "name": "São Brás de Alportel",
+    "lat": 37.1517,
+    "lng": -7.8870,
+    "type": "municipio"
+  },
+  {
+    "id": 813,
+    "name": "Silves",
+    "lat": 37.1895,
+    "lng": -8.4388,
+    "type": "municipio"
+  },
+  {
+    "id": 814,
+    "name": "Tavira",
+    "lat": 37.1260,
+    "lng": -7.6496,
+    "type": "municipio"
+  },
+  {
+    "id": 815,
+    "name": "Vila do Bispo",
+    "lat": 37.0818,
+    "lng": -8.9118,
+    "type": "municipio"
+  },
+  {
+    "id": 816,
+    "name": "Vila Real de Santo António",
+    "lat": 37.1945,
+    "lng": -7.4169,
+    "type": "municipio"
+  },
+  {
+    "id": 901,
+    "name": "Aguiar da Beira",
+    "lat": 40.8190,
+    "lng": -7.5432,
+    "type": "municipio"
+  },
+  {
+    "id": 902,
+    "name": "Almeida",
+    "lat": 40.7238,
+    "lng": -6.9066,
+    "type": "municipio"
+  },
+  {
+    "id": 903,
+    "name": "Celorico da Beira",
+    "lat": 40.6346,
+    "lng": -7.3912,
+    "type": "municipio"
+  },
+  {
+    "id": 904,
+    "name": "Figueira de Castelo Rodrigo",
+    "lat": 40.8953,
+    "lng": -6.9614,
+    "type": "municipio"
+  },
+  {
+    "id": 905,
+    "name": "Fornos de Algodres",
+    "lat": 40.6225,
+    "lng": -7.5307,
+    "type": "municipio"
+  },
+  {
+    "id": 906,
+    "name": "Gouveia",
+    "lat": 40.4939,
+    "lng": -7.5925,
+    "type": "municipio"
+  },
+  {
+    "id": 907,
+    "name": "Guarda",
+    "lat": 40.5383,
+    "lng": -7.2661,
+    "type": "municipio"
+  },
+  {
+    "id": 908,
+    "name": "Manteigas",
+    "lat": 40.4014,
+    "lng": -7.5379,
+    "type": "municipio"
+  },
+  {
+    "id": 909,
+    "name": "Mêda",
+    "lat": 40.9631,
+    "lng": -7.2625,
+    "type": "municipio"
+  },
+  {
+    "id": 910,
+    "name": "Pinhel",
+    "lat": 40.7760,
+    "lng": -7.1278,
+    "type": "municipio"
+  },
+  {
+    "id": 911,
+    "name": "Sabugal",
+    "lat": 40.3524,
+    "lng": -7.0906,
+    "type": "municipio"
+  },
+  {
+    "id": 912,
+    "name": "Seia",
+    "lat": 40.4206,
+    "lng": -7.7025,
+    "type": "municipio"
+  },
+  {
+    "id": 913,
+    "name": "Trancoso",
+    "lat": 40.7788,
+    "lng": -7.3484,
+    "type": "municipio"
+  },
+  {
+    "id": 914,
+    "name": "Vila Nova de Foz Côa",
+    "lat": 41.0827,
+    "lng": -7.1442,
+    "type": "municipio"
+  },
+
+  {
+    "id": 1001,
+    "name": "Alcobaça",
+    "lat": 39.5510,
+    "lng": -8.9772,
+    "type": "municipio"
+  },
+  {
+    "id": 1002,
+    "name": "Alvaiázere",
+    "lat": 39.8130,
+    "lng": -8.3813,
+    "type": "municipio"
+  },
+  {
+    "id": 1003,
+    "name": "Ansião",
+    "lat": 39.9118,
+    "lng": -8.4357,
+    "type": "municipio"
+  },
+  {
+    "id": 1004,
+    "name": "Batalha",
+    "lat": 39.6583,
+    "lng": -8.8239,
+    "type": "municipio"
+  },
+  {
+    "id": 1005,
+    "name": "Bombarral",
+    "lat": 39.2682,
+    "lng": -9.1583,
+    "type": "municipio"
+  },
+  {
+    "id": 1006,
+    "name": "Caldas da Rainha",
+    "lat": 39.4062,
+    "lng": -9.1349,
+    "type": "municipio"
+  },
+  {
+    "id": 1007,
+    "name": "Castanheira de Pêra",
+    "lat": 40.0039,
+    "lng": -8.2104,
+    "type": "municipio"
+  },
+  {
+    "id": 1008,
+    "name": "Figueiró dos Vinhos",
+    "lat": 39.9022,
+    "lng": -8.2728,
+    "type": "municipio"
+  },
+  {
+    "id": 1009,
+    "name": "Leiria",
+    "lat": 39.7438,
+    "lng": -8.8070,
+    "type": "municipio"
+  },
+  {
+    "id": 1010,
+    "name": "Marinha Grande",
+    "lat": 39.7490,
+    "lng": -8.9324,
+    "type": "municipio"
+  },
+  {
+    "id": 1011,
+    "name": "Nazaré",
+    "lat": 39.5992,
+    "lng": -9.0722,
+    "type": "municipio"
+  },
+  {
+    "id": 1012,
+    "name": "Óbidos",
+    "lat": 39.3621,
+    "lng": -9.1571,
+    "type": "municipio"
+  },
+  {
+    "id": 1013,
+    "name": "Pedrógão Grande",
+    "lat": 39.9157,
+    "lng": -8.1465,
+    "type": "municipio"
+  },
+  {
+    "id": 1014,
+    "name": "Peniche",
+    "lat": 39.3558,
+    "lng": -9.3811,
+    "type": "municipio"
+  },
+  {
+    "id": 1015,
+    "name": "Pombal",
+    "lat": 39.9150,
+    "lng": -8.6277,
+    "type": "municipio"
+  },
+  {
+    "id": 1016,
+    "name": "Porto de Mós",
+    "lat": 39.6019,
+    "lng": -8.8197,
+    "type": "municipio"
+  },
+
+  {
+    "id": 1101,
+    "name": "Alenquer",
+    "lat": 39.0538,
+    "lng": -9.0063,
+    "type": "municipio"
+  },
+  {
+    "id": 1102,
+    "name": "Amadora",
+    "lat": 38.7596,
+    "lng": -9.2237,
+    "type": "municipio"
+  },
+  {
+    "id": 1103,
+    "name": "Arruda dos Vinhos",
+    "lat": 38.9830,
+    "lng": -9.0768,
+    "type": "municipio"
+  },
+  {
+    "id": 1104,
+    "name": "Azambuja",
+    "lat": 39.0696,
+    "lng": -8.8690,
+    "type": "municipio"
+  },
+  {
+    "id": 1105,
+    "name": "Cadaval",
+    "lat": 39.2435,
+    "lng": -9.1022,
+    "type": "municipio"
+  },
+  {
+    "id": 1106,
+    "name": "Cascais",
+    "lat": 38.6979,
+    "lng": -9.4215,
+    "type": "municipio"
+  },
+  {
+    "id": 1107,
+    "name": "Lisboa",
+    "lat": 38.7223,
+    "lng": -9.1393,
+    "type": "municipio"
+  },
+  {
+    "id": 1108,
+    "name": "Loures",
+    "lat": 38.8299,
+    "lng": -9.1691,
+    "type": "municipio"
+  },
+  {
+    "id": 1109,
+    "name": "Lourinhã",
+    "lat": 39.2423,
+    "lng": -9.3129,
+    "type": "municipio"
+  },
+  {
+    "id": 1110,
+    "name": "Mafra",
+    "lat": 38.9366,
+    "lng": -9.3283,
+    "type": "municipio"
+  },
+  {
+    "id": 1111,
+    "name": "Odivelas",
+    "lat": 38.7954,
+    "lng": -9.1764,
+    "type": "municipio"
+  },
+  {
+    "id": 1112,
+    "name": "Oeiras",
+    "lat": 38.6915,
+    "lng": -9.3039,
+    "type": "municipio"
+  },
+  {
+    "id": 1113,
+    "name": "Sintra",
+    "lat": 38.8029,
+    "lng": -9.3817,
+    "type": "municipio"
+  },
+  {
+    "id": 1114,
+    "name": "Sobral de Monte Agraço",
+    "lat": 39.0190,
+    "lng": -9.1511,
+    "type": "municipio"
+  },
+  {
+    "id": 1115,
+    "name": "Torres Vedras",
+    "lat": 39.0918,
+    "lng": -9.2600,
+    "type": "municipio"
+  },
+  {
+    "id": 1116,
+    "name": "Vila Franca de Xira",
+    "lat": 38.9551,
+    "lng": -8.9892,
+    "type": "municipio"
+  },
+
+  {
+    "id": 1201,
+    "name": "Alter do Chão",
+    "lat": 39.1994,
+    "lng": -7.6599,
+    "type": "municipio"
+  },
+  {
+    "id": 1202,
+    "name": "Arronches",
+    "lat": 39.1226,
+    "lng": -7.2847,
+    "type": "municipio"
+  },
+  {
+    "id": 1203,
+    "name": "Avis",
+    "lat": 39.0573,
+    "lng": -7.8906,
+    "type": "municipio"
+  },
+  {
+    "id": 1204,
+    "name": "Campo Maior",
+    "lat": 39.0135,
+    "lng": -7.0673,
+    "type": "municipio"
+  },
+  {
+    "id": 1205,
+    "name": "Castelo de Vide",
+    "lat": 39.4158,
+    "lng": -7.4549,
+    "type": "municipio"
+  },
+  {
+    "id": 1206,
+    "name": "Crato",
+    "lat": 39.2905,
+    "lng": -7.6475,
+    "type": "municipio"
+  },
+  {
+    "id": 1207,
+    "name": "Elvas",
+    "lat": 38.8803,
+    "lng": -7.1627,
+    "type": "municipio"
+  },
+  {
+    "id": 1208,
+    "name": "Fronteira",
+    "lat": 39.0526,
+    "lng": -7.6432,
+    "type": "municipio"
+  },
+  {
+    "id": 1209,
+    "name": "Gavião",
+    "lat": 39.4607,
+    "lng": -7.9366,
+    "type": "municipio"
+  },
+  {
+    "id": 1210,
+    "name": "Marvão",
+    "lat": 39.3940,
+    "lng": -7.3768,
+    "type": "municipio"
+  },
+  {
+    "id": 1211,
+    "name": "Monforte",
+    "lat": 39.0520,
+    "lng": -7.4384,
+    "type": "municipio"
+  },
+  {
+    "id": 1212,
+    "name": "Nisa",
+    "lat": 39.5135,
+    "lng": -7.6491,
+    "type": "municipio"
+  },
+  {
+    "id": 1213,
+    "name": "Ponte de Sor",
+    "lat": 39.2505,
+    "lng": -8.0123,
+    "type": "municipio"
+  },
+  {
+    "id": 1214,
+    "name": "Portalegre",
+    "lat": 39.2952,
+    "lng": -7.4284,
+    "type": "municipio"
+  },
+  {
+    "id": 1215,
+    "name": "Sousel",
+    "lat": 38.9526,
+    "lng": -7.6766,
+    "type": "municipio"
+  },
+  {
+    "id": 1301,
+    "name": "Amarante",
+    "lat": 41.2720,
+    "lng": -8.0827,
+    "type": "municipio"
+  },
+  {
+    "id": 1302,
+    "name": "Baião",
+    "lat": 41.1610,
+    "lng": -8.0336,
+    "type": "municipio"
+  },
+  {
+    "id": 1303,
+    "name": "Felgueiras",
+    "lat": 41.3667,
+    "lng": -8.1953,
+    "type": "municipio"
+  },
+  {
+    "id": 1304,
+    "name": "Gondomar",
+    "lat": 41.1408,
+    "lng": -8.5308,
+    "type": "municipio"
+  },
+  {
+    "id": 1305,
+    "name": "Lousada",
+    "lat": 41.2769,
+    "lng": -8.2801,
+    "type": "municipio"
+  },
+  {
+    "id": 1306,
+    "name": "Maia",
+    "lat": 41.2279,
+    "lng": -8.6210,
+    "type": "municipio"
+  },
+  {
+    "id": 1307,
+    "name": "Marco de Canaveses",
+    "lat": 41.1856,
+    "lng": -8.1519,
+    "type": "municipio"
+  },
+  {
+    "id": 1308,
+    "name": "Matosinhos",
+    "lat": 41.1844,
+    "lng": -8.6963,
+    "type": "municipio"
+  },
+  {
+    "id": 1309,
+    "name": "Paços de Ferreira",
+    "lat": 41.2766,
+    "lng": -8.3761,
+    "type": "municipio"
+  },
+  {
+    "id": 1310,
+    "name": "Paredes",
+    "lat": 41.2057,
+    "lng": -8.3308,
+    "type": "municipio"
+  },
+  {
+    "id": 1311,
+    "name": "Penafiel",
+    "lat": 41.2014,
+    "lng": -8.2936,
+    "type": "municipio"
+  },
+  {
+    "id": 1312,
+    "name": "Porto",
+    "lat": 41.1579,
+    "lng": -8.6291,
+    "type": "municipio"
+  },
+  {
+    "id": 1313,
+    "name": "Póvoa de Varzim",
+    "lat": 41.3804,
+    "lng": -8.7609,
+    "type": "municipio"
+  },
+  {
+    "id": 1314,
+    "name": "Santo Tirso",
+    "lat": 41.3431,
+    "lng": -8.4738,
+    "type": "municipio"
+  },
+  {
+    "id": 1315,
+    "name": "Trofa",
+    "lat": 41.3391,
+    "lng": -8.5600,
+    "type": "municipio"
+  },
+  {
+    "id": 1316,
+    "name": "Valongo",
+    "lat": 41.1901,
+    "lng": -8.4981,
+    "type": "municipio"
+  },
+  {
+    "id": 1317,
+    "name": "Vila do Conde",
+    "lat": 41.3551,
+    "lng": -8.7423,
+    "type": "municipio"
+  },
+  {
+    "id": 1318,
+    "name": "Vila Nova de Gaia",
+    "lat": 41.1239,
+    "lng": -8.6118,
+    "type": "municipio"
+  },
+
+  {
+    "id": 1401,
+    "name": "Abrantes",
+    "lat": 39.4644,
+    "lng": -8.1969,
+    "type": "municipio"
+  },
+  {
+    "id": 1402,
+    "name": "Alcanena",
+    "lat": 39.4586,
+    "lng": -8.6691,
+    "type": "municipio"
+  },
+  {
+    "id": 1403,
+    "name": "Almeirim",
+    "lat": 39.2096,
+    "lng": -8.6276,
+    "type": "municipio"
+  },
+  {
+    "id": 1404,
+    "name": "Alpiarça",
+    "lat": 39.2600,
+    "lng": -8.5830,
+    "type": "municipio"
+  },
+  {
+    "id": 1405,
+    "name": "Benavente",
+    "lat": 38.9791,
+    "lng": -8.8042,
+    "type": "municipio"
+  },
+  {
+    "id": 1406,
+    "name": "Cartaxo",
+    "lat": 39.1580,
+    "lng": -8.7885,
+    "type": "municipio"
+  },
+  {
+    "id": 1407,
+    "name": "Chamusca",
+    "lat": 39.3562,
+    "lng": -8.4812,
+    "type": "municipio"
+  },
+  {
+    "id": 1408,
+    "name": "Constância",
+    "lat": 39.4772,
+    "lng": -8.3378,
+    "type": "municipio"
+  },
+  {
+    "id": 1409,
+    "name": "Coruche",
+    "lat": 38.9592,
+    "lng": -8.5255,
+    "type": "municipio"
+  },
+  {
+    "id": 1410,
+    "name": "Entroncamento",
+    "lat": 39.4629,
+    "lng": -8.4682,
+    "type": "municipio"
+  },
+  {
+    "id": 1411,
+    "name": "Ferreira do Zêzere",
+    "lat": 39.6917,
+    "lng": -8.2917,
+    "type": "municipio"
+  },
+  {
+    "id": 1412,
+    "name": "Golegã",
+    "lat": 39.4055,
+    "lng": -8.4852,
+    "type": "municipio"
+  },
+  {
+    "id": 1413,
+    "name": "Mação",
+    "lat": 39.5552,
+    "lng": -7.9996,
+    "type": "municipio"
+  },
+  {
+    "id": 1414,
+    "name": "Ourém",
+    "lat": 39.6416,
+    "lng": -8.5910,
+    "type": "municipio"
+  },
+  {
+    "id": 1415,
+    "name": "Rio Maior",
+    "lat": 39.3364,
+    "lng": -8.9360,
+    "type": "municipio"
+  },
+  {
+    "id": 1416,
+    "name": "Salvaterra de Magos",
+    "lat": 39.0270,
+    "lng": -8.7915,
+    "type": "municipio"
+  },
+  {
+    "id": 1417,
+    "name": "Santarém",
+    "lat": 39.2333,
+    "lng": -8.6833,
+    "type": "municipio"
+  },
+  {
+    "id": 1418,
+    "name": "Sardoal",
+    "lat": 39.5332,
+    "lng": -8.1601,
+    "type": "municipio"
+  },
+  {
+    "id": 1419,
+    "name": "Tomar",
+    "lat": 39.6052,
+    "lng": -8.4077,
+    "type": "municipio"
+  },
+  {
+    "id": 1420,
+    "name": "Torres Novas",
+    "lat": 39.4800,
+    "lng": -8.5414,
+    "type": "municipio"
+  },
+  {
+    "id": 1421,
+    "name": "Vila Nova da Barquinha",
+    "lat": 39.4590,
+    "lng": -8.4316,
+    "type": "municipio"
+  },
+
+  {
+    "id": 1501,
+    "name": "Alcácer do Sal",
+    "lat": 38.3729,
+    "lng": -8.5133,
+    "type": "municipio"
+  },
+  {
+    "id": 1502,
+    "name": "Alcochete",
+    "lat": 38.7554,
+    "lng": -8.9609,
+    "type": "municipio"
+  },
+  {
+    "id": 1503,
+    "name": "Almada",
+    "lat": 38.6790,
+    "lng": -9.1569,
+    "type": "municipio"
+  },
+  {
+    "id": 1504,
+    "name": "Barreiro",
+    "lat": 38.6608,
+    "lng": -9.0718,
+    "type": "municipio"
+  },
+  {
+    "id": 1505,
+    "name": "Grândola",
+    "lat": 38.1772,
+    "lng": -8.5684,
+    "type": "municipio"
+  },
+  {
+    "id": 1506,
+    "name": "Moita",
+    "lat": 38.6496,
+    "lng": -9.0016,
+    "type": "municipio"
+  },
+  {
+    "id": 1507,
+    "name": "Montijo",
+    "lat": 38.7067,
+    "lng": -8.9739,
+    "type": "municipio"
+  },
+  {
+    "id": 1508,
+    "name": "Palmela",
+    "lat": 38.5684,
+    "lng": -8.9032,
+    "type": "municipio"
+  },
+  {
+    "id": 1509,
+    "name": "Santiago do Cacém",
+    "lat": 38.0142,
+    "lng": -8.6974,
+    "type": "municipio"
+  },
+  {
+    "id": 1510,
+    "name": "Seixal",
+    "lat": 38.6392,
+    "lng": -9.1015,
+    "type": "municipio"
+  },
+  {
+    "id": 1511,
+    "name": "Sesimbra",
+    "lat": 38.4445,
+    "lng": -9.1015,
+    "type": "municipio"
+  },
+  {
+    "id": 1512,
+    "name": "Setúbal",
+    "lat": 38.5244,
+    "lng": -8.8882,
+    "type": "municipio"
+  },
+  {
+    "id": 1513,
+    "name": "Sines",
+    "lat": 37.9563,
+    "lng": -8.8698,
+    "type": "municipio"
+  },
+
+  {
+    "id": 1601,
+    "name": "Arcos de Valdevez",
+    "lat": 41.8471,
+    "lng": -8.4179,
+    "type": "municipio"
+  },
+  {
+    "id": 1602,
+    "name": "Caminha",
+    "lat": 41.8767,
+    "lng": -8.8389,
+    "type": "municipio"
+  },
+  {
+    "id": 1603,
+    "name": "Melgaço",
+    "lat": 42.1130,
+    "lng": -8.2608,
+    "type": "municipio"
+  },
+  {
+    "id": 1604,
+    "name": "Monção",
+    "lat": 42.0784,
+    "lng": -8.4802,
+    "type": "municipio"
+  },
+  {
+    "id": 1605,
+    "name": "Paredes de Coura",
+    "lat": 41.9133,
+    "lng": -8.5641,
+    "type": "municipio"
+  },
+  {
+    "id": 1606,
+    "name": "Ponte da Barca",
+    "lat": 41.8080,
+    "lng": -8.4196,
+    "type": "municipio"
+  },
+  {
+    "id": 1607,
+    "name": "Ponte de Lima",
+    "lat": 41.7671,
+    "lng": -8.5830,
+    "type": "municipio"
+  },
+  {
+    "id": 1608,
+    "name": "Valença",
+    "lat": 42.0242,
+    "lng": -8.6353,
+    "type": "municipio"
+  },
+  {
+    "id": 1609,
+    "name": "Viana do Castelo",
+    "lat": 41.6918,
+    "lng": -8.8345,
+    "type": "municipio"
+  },
+  {
+    "id": 1610,
+    "name": "Vila Nova de Cerveira",
+    "lat": 41.9405,
+    "lng": -8.7441,
+    "type": "municipio"
+  },
+
+  {
+    "id": 1701,
+    "name": "Alijó",
+    "lat": 41.2764,
+    "lng": -7.4746,
+    "type": "municipio"
+  },
+  {
+    "id": 1702,
+    "name": "Boticas",
+    "lat": 41.6893,
+    "lng": -7.6625,
+    "type": "municipio"
+  },
+  {
+    "id": 1703,
+    "name": "Chaves",
+    "lat": 41.7401,
+    "lng": -7.4716,
+    "type": "municipio"
+  },
+  {
+    "id": 1704,
+    "name": "Mesão Frio",
+    "lat": 41.1574,
+    "lng": -7.8920,
+    "type": "municipio"
+  },
+  {
+    "id": 1705,
+    "name": "Mondim de Basto",
+    "lat": 41.4101,
+    "lng": -7.9529,
+    "type": "municipio"
+  },
+  {
+    "id": 1706,
+    "name": "Montalegre",
+    "lat": 41.8258,
+    "lng": -7.7918,
+    "type": "municipio"
+  },
+  {
+    "id": 1707,
+    "name": "Murça",
+    "lat": 41.4080,
+    "lng": -7.4539,
+    "type": "municipio"
+  },
+  {
+    "id": 1708,
+    "name": "Peso da Régua",
+    "lat": 41.1645,
+    "lng": -7.7874,
+    "type": "municipio"
+  },
+  {
+    "id": 1709,
+    "name": "Ribeira de Pena",
+    "lat": 41.5222,
+    "lng": -7.7925,
+    "type": "municipio"
+  },
+  {
+    "id": 1710,
+    "name": "Sabrosa",
+    "lat": 41.2586,
+    "lng": -7.5771,
+    "type": "municipio"
+  },
+  {
+    "id": 1711,
+    "name": "Santa Marta de Penaguião",
+    "lat": 41.2096,
+    "lng": -7.7877,
+    "type": "municipio"
+  },
+  {
+    "id": 1712,
+    "name": "Valpaços",
+    "lat": 41.6094,
+    "lng": -7.3110,
+    "type": "municipio"
+  },
+  {
+    "id": 1713,
+    "name": "Vila Pouca de Aguiar",
+    "lat": 41.4988,
+    "lng": -7.6433,
+    "type": "municipio"
+  },
+  {
+    "id": 1714,
+    "name": "Vila Real",
+    "lat": 41.3004,
+    "lng": -7.7441,
+    "type": "municipio"
+  },
+
+  {
+    "id": 1801,
+    "name": "Armamar",
+    "lat": 41.1098,
+    "lng": -7.6917,
+    "type": "municipio"
+  },
+  {
+    "id": 1802,
+    "name": "Carregal do Sal",
+    "lat": 40.4300,
+    "lng": -8.0033,
+    "type": "municipio"
+  },
+  {
+    "id": 1803,
+    "name": "Castro Daire",
+    "lat": 40.8996,
+    "lng": -7.9306,
+    "type": "municipio"
+  },
+  {
+    "id": 1804,
+    "name": "Cinfães",
+    "lat": 41.0715,
+    "lng": -8.0898,
+    "type": "municipio"
+  },
+  {
+    "id": 1805,
+    "name": "Lamego",
+    "lat": 41.0984,
+    "lng": -7.8080,
+    "type": "municipio"
+  },
+  {
+    "id": 1806,
+    "name": "Mangualde",
+    "lat": 40.6052,
+    "lng": -7.7617,
+    "type": "municipio"
+  },
+  {
+    "id": 1807,
+    "name": "Moimenta da Beira",
+    "lat": 40.9806,
+    "lng": -7.6146,
+    "type": "municipio"
+  },
+  {
+    "id": 1808,
+    "name": "Mortágua",
+    "lat": 40.3957,
+    "lng": -8.2307,
+    "type": "municipio"
+  },
+  {
+    "id": 1809,
+    "name": "Nelas",
+    "lat": 40.5303,
+    "lng": -7.8521,
+    "type": "municipio"
+  },
+  {
+    "id": 1810,
+    "name": "Oliveira de Frades",
+    "lat": 40.7327,
+    "lng": -8.1748,
+    "type": "municipio"
+  },
+  {
+    "id": 1811,
+    "name": "Penalva do Castelo",
+    "lat": 40.6728,
+    "lng": -7.7001,
+    "type": "municipio"
+  },
+  {
+    "id": 1812,
+    "name": "Penedono",
+    "lat": 40.9892,
+    "lng": -7.3941,
+    "type": "municipio"
+  },
+  {
+    "id": 1813,
+    "name": "Resende",
+    "lat": 41.1060,
+    "lng": -7.9620,
+    "type": "municipio"
+  },
+  {
+    "id": 1814,
+    "name": "Santa Comba Dão",
+    "lat": 40.3970,
+    "lng": -8.1302,
+    "type": "municipio"
+  },
+  {
+    "id": 1815,
+    "name": "São João da Pesqueira",
+    "lat": 41.1472,
+    "lng": -7.4063,
+    "type": "municipio"
+  },
+  {
+    "id": 1816,
+    "name": "São Pedro do Sul",
+    "lat": 40.7584,
+    "lng": -8.0617,
+    "type": "municipio"
+  },
+  {
+    "id": 1817,
+    "name": "Sátão",
+    "lat": 40.7410,
+    "lng": -7.7337,
+    "type": "municipio"
+  },
+  {
+    "id": 1818,
+    "name": "Sernancelhe",
+    "lat": 40.8988,
+    "lng": -7.4933,
+    "type": "municipio"
+  },
+  {
+    "id": 1819,
+    "name": "Tabuaço",
+    "lat": 41.1167,
+    "lng": -7.5684,
+    "type": "municipio"
+  },
+  {
+    "id": 1820,
+    "name": "Tarouca",
+    "lat": 41.0232,
+    "lng": -7.7735,
+    "type": "municipio"
+  },
+  {
+    "id": 1821,
+    "name": "Tondela",
+    "lat": 40.5134,
+    "lng": -8.0833,
+    "type": "municipio"
+  },
+  {
+    "id": 1822,
+    "name": "Vila Nova de Paiva",
+    "lat": 40.8526,
+    "lng": -7.7289,
+    "type": "municipio"
+  },
+  {
+    "id": 1823,
+    "name": "Viseu",
+    "lat": 40.6566,
+    "lng": -7.9124,
+    "type": "municipio"
+  },
+  {
+    "id": 1824,
+    "name": "Vouzela",
+    "lat": 40.7231,
+    "lng": -8.1118,
+    "type": "municipio"
+  }
+]

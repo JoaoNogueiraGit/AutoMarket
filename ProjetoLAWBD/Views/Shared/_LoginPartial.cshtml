@@ -1,0 +1,88 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ProjetoLAWBD.Models
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<ul class="navbar-nav ms-auto align-items-center">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        // Utilizador Autenticado
+
+        @if (User.IsInRole("Vendedor")) {
+
+            <li class="nav-item">
+                <a class="nav-link" asp-area="Identity" asp-page="/Account/RegisterBuyer">Comprar</a>
+            </li>
+        }
+        else if (User.IsInRole("Comprador"))
+        {
+            
+            <li class="nav-item">
+                <a class="nav-link" asp-area="Identity" asp-page="/Account/RegisterSeller">Vender</a>
+            </li>
+        }
+        @* else if (User.IsInRole("Admin")) {
+
+        } *@
+
+        // Circulo Perfil
+        <li class="nav-item">
+            @if (User.IsInRole("Administrador"))
+            {
+                <a class="nav-link profile-pic-link" asp-controller="Admin" asp-action="Index" title="Área Pessoal">
+                    <div class="profile-pic-circle">
+                        @{
+                            var name = User.Identity.Name ?? "U";
+                            var initial = name.Substring(0, 1).ToUpper();
+                        }
+                        <span>@initial</span>
+                    </div>
+                </a>
+            }
+            else if (User.IsInRole("Vendedor")) {
+                <a class="nav-link profile-pic-link" asp-controller="Vendedor" asp-action="MeusAnuncios" title="Área Pessoal">
+                    <div class="profile-pic-circle">
+                        @{
+                            var name = User.Identity.Name ?? "U";
+                            var initial = name.Substring(0, 1).ToUpper();
+                        }
+                        <span>@initial</span>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a class="nav-link profile-pic-link" asp-controller="Comprador" asp-action="MarcasFavoritas" title="Área Pessoal">
+                    <div class="profile-pic-circle">
+                        @{
+                            var name = User.Identity.Name ?? "U";
+                            var initial = name.Substring(0, 1).ToUpper();
+                        }
+                        <span>@initial</span>
+                    </div>
+                </a>
+            }
+        </li>
+        
+
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="nav-link btn btn-link">Sair</button>
+            </form>
+        </li>
+}
+else
+{
+    // Utilizador não autenticado
+
+        <li class="nav-item">
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/RegisterBuyer">Comprar</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/RegisterSeller">Vender</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+}
+</ul>

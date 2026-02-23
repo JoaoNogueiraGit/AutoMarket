@@ -1,0 +1,44 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Confirmação de Registo";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 60vh;">
+    <div class="card shadow-sm border-0" style="width: 100%; max-width: 550px; border-radius: 15px;">
+        <div class="card-body p-5 text-center">
+
+            
+
+            <h2 class="fw-bold text-dark mb-3">Verifique o seu Email</h2>
+
+            @if (@Model.DisplayConfirmAccountLink) {
+                <p class="text-muted mb-4">
+                    Como o envio de email real pode estar desligado em desenvolvimento, clica aqui para confirmar:
+                </p>
+                <p>
+                    <a id="confirm-link" href="@Model.EmailConfirmationUrl" class="btn btn-warning w-100 fw-bold">
+                        Simular Clique no Email (Dev)
+                    </a>
+                </p>
+            }
+            else {
+                <p class="text-muted mb-4" style="font-size: 1.1rem;">
+                    Enviámos um email de confirmação para <strong>@Model.Email</strong>.
+                </p>
+
+                <p class="text-muted small mb-4">
+                    Por favor, abra a sua caixa de correio e clique no link para ativar a sua conta.
+                    Se não encontrar, verifique a pasta de <em>Spam</em>.
+                </p>
+
+                <div class="d-grid gap-2">
+                    <a asp-page="/Index" class="btn btn-outline-secondary">
+                        Voltar à Página Inicial
+                    </a>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

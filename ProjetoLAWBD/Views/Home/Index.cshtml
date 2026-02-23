@@ -1,0 +1,848 @@
+﻿@model ProjetoLAWBD.ViewModels.HomeIndexViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@{
+    ViewData["Title"] = "Página Inicial";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="hero-section text-center text-white">
+    <div class="container py-5">
+        <h1 class="display-4 fw-bold mt-4">Encontre o seu próximo carro</h1>
+        <p class="lead mb-5">Milhares de veículos verificados ao melhor preço</p>
+    </div>
+</div>
+
+<div class="container search-container-wrapper">
+    <div class="card shadow search-card border-0">
+        <div class="card-body p-4">
+
+            <form asp-controller="Anuncios" asp-action="Index" method="get" class="mb-4">
+                <div class="input-group input-group-lg">
+                    <input type="text" class="form-control" name="termo" placeholder="O que procuras? (ex: BMW Série 3, Mercedes...)">
+                    <button class="btn btn-dark px-4" type="submit">Pesquisar</button>
+                </div>
+            </form>
+
+            <ul class="nav nav-tabs nav-tabs-custom mb-3" id="searchTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="avancada-tab" data-bs-toggle="tab" data-bs-target="#avancada" type="button" role="tab">Pesquisa Avançada</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="favoritos-tab" data-bs-toggle="tab" data-bs-target="#favoritos" type="button" role="tab">
+                        Filtros Favoritos
+                        @if (!SignInManager.IsSignedIn(User)) {
+                            <i class="fas fa-lock small ms-1 text-muted"></i>
+                        }
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="searchTabsContent">
+
+                <div class="tab-pane fade show active" id="avancada" role="tabpanel">
+                    <form asp-controller="Anuncios" asp-action="Index" method="get">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label small text-muted">Marca</label>
+                                <select class="form-select" name="marcaId" id="marca-dropdown">
+                                    <option value="" selected>Todas</option>
+                                    @foreach (var marca in Model.Marcas) {
+                                        <option value="@marca.IdMarca">@marca.Nome</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label small text-muted">Modelo</label>
+                                <select class="form-select" name="modeloId" id="modelo-dropdown" disabled>
+                                    <option value="" selected>Todos</option>
+                                    @foreach (var modelo in Model.Modelos) {
+                                        <option value="@modelo.IdModelo" data-marca-id="@modelo.IdMarca">@modelo.Nome</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label small text-muted">Categoria</label>
+                                <select class="form-select" name="categoriaId">
+                                    <option value="" selected>Todas</option>
+                                    @foreach (var categoria in Model.Categorias) {
+                                        <option value="@categoria.IdCategoria">@categoria.Nome</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small text-muted">Combustivel</label>
+                                <select class="form-select" name="combustivelId">
+                                    <option value="" selected>Todos</option>
+                                    @foreach (var combustivel in Model.Combustiveis) {
+                                        <option value="@combustivel.IdCombustivel">@combustivel.Nome</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label small text-muted">Localização</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0"><i class="fas fa-map-marker-alt text-danger"></i></span>
+                                    <input type="text" 
+                                           class="form-control border-start-0 ps-0" 
+                                           id="mainLocationDisplay" 
+                                           placeholder="Portugal (Todo o País)" 
+                                           readonly 
+                                           style="cursor: pointer; background-color: white;"
+                                           data-bs-toggle="modal" 
+                                           data-bs-target="#locationModal">
+                                </div>
+                                <input type="hidden" name="LocalizacaoNome" id="hiddenLocationName">
+                                <input type="hidden" name="Latitude" id="hiddenLat">
+                                <input type="hidden" name="Longitude" id="hiddenLng">
+                                <input type="hidden" name="Raio" id="hiddenRadius">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label small text-muted">Caixa</label>
+                                <select class="form-select" name="caixaId">
+                                    <option value="" selected>Todas</option>
+                                    @foreach (var caixa in Model.Caixas) {
+                                        <option value="@caixa.IdCaixa">@caixa.Nome</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label small text-muted">Cor</label>
+                                <select class="form-select" name="corId">
+                                    <option value="" selected>Todas</option>
+                                    @foreach (var cor in Model.Cores) {
+                                        <option value="@cor.IdCor">@cor.Nome</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label small text-muted">Ano</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <select class="form-select" name="anoDesde" id="ano-desde">
+                                        <option value="" selected>Desde</option>
+                                        @{
+                                            int anoAtual = DateTime.Now.Year;
+                                            for (int ano = anoAtual; ano >= 1990; ano--)
+                                            {
+                                                <option value="@ano">@ano</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span class="mx-1">-</span>
+                                    <select class="form-select" name="anoAte" id="ano-ate">
+                                        <option value="" selected>Até</option>
+                                        @{
+                                            for (int ano = anoAtual; ano >= 1990; ano--)
+                                            {
+                                                <option value="@ano">@ano</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3"> 
+                                <label class="form-label small text-muted">Kms Até</label>
+                                <input type="tel" class="form-control" name="kmsAte" placeholder="Ex: 50000"/>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label small text-muted mb-2">Intervalo de Preço</label>
+   
+                                <div class="range-slider-container position-relative mb-4" style="height: 20px;">
+                                    <div class="slider-track-bg"></div>
+                                    <div class="slider-track-fill" id="trackFill"></div>
+        
+                                    <input type="range" class="double-range" min="0" max="@((int)Model.PrecoMaxDb)" value="0" id="sliderMin">
+                                    <input type="range" class="double-range" min="0" max="@((int)Model.PrecoMaxDb)" value="@((int)Model.PrecoMaxDb)" id="sliderMax">
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center gap-2">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text bg-white border-end-0">€</span>
+                                        <input type="tel" class="form-control border-start-0 ps-1" id="inputMin" name ="precoMin" value="10000" min="0" max="150000">
+                                    </div>
+                                    <span class="text-muted">-</span>
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text bg-white border-end-0">€</span>
+                                        <input type="tel" class="form-control border-start-0 ps-1" id="inputMax" name="precoMax" value="80000" min="0" max="150000">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-outline-dark w-100 fw-bold">Ver Resultados</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="favoritos" role="tabpanel">
+                    @if (SignInManager.IsSignedIn(User)) 
+                    {
+                        @if (Model.FiltrosGuardados != null && Model.FiltrosGuardados.Any())
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var filtro in Model.FiltrosGuardados)
+                                {
+                                    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-3">
+                        
+                                        <a asp-controller="Anuncios" asp-action="CarregarFiltro" asp-route-id="@filtro.IdFiltro" class="text-decoration-none text-dark flex-grow-1">
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-light rounded-circle p-2 me-3 text-center" style="width: 45px; height: 45px;">
+                                                    <img src="~/icons/search-icon.svg" alt="Pesquisar" width="20" height="20"/>
+                                                </div>
+                                
+                                                <div>
+                                                    <h6 class="fw-bold mb-0">@filtro.NomeFiltro</h6>
+                                                    <small class="text-muted">
+                                                        @if(filtro.Marca != null) { <span>@filtro.Marca.Nome</span> } else { <span>Todas as marcas</span> }
+                                        
+                                                        @if(filtro.PrecoMaximo.HasValue) { <span>• Até @filtro.PrecoMaximo.Value.ToString("C0")</span> }
+                                        
+                                                        @if(!string.IsNullOrEmpty(filtro.Localizacao)) { <span>• @filtro.Localizacao</span> }
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </a>
+
+                                        <form asp-controller="Anuncios" asp-action="ApagarFiltro" asp-route-id="@filtro.IdFiltro" method="post" class="ms-3"
+                                              onsubmit="return confirm('Tem a certeza que deseja apagar este filtro?');">
+            
+                                            <button type="submit" class="btn btn-link p-0 opacity-75 hover-opacity-100" title="Apagar" style="text-decoration: none;">
+        
+                                                <img src="~/icons/trash-icon.svg" alt="Apagar" width="20" height="20" />
+        
+                                            </button>
+                                        </form>
+                                    </div>
+                                }
+                            </div>
+            
+                            <div class="text-center mt-3 p-3 bg-light rounded border border-dashed">
+                                <small class="text-muted d-block mb-2">Quer guardar uma nova pesquisa?</small>
+                                <button class="btn btn-sm btn-outline-primary" type="button" onclick="document.getElementById('avancada-tab').click()">
+                                    <i class="fas fa-plus me-1"></i> Criar na Pesquisa Avançada
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <div class="mb-3">
+                                    <i class="far fa-heart fa-3x text-muted opacity-25"></i>
+                                </div>
+                                <h6 class="fw-bold text-muted">Ainda não tem pesquisas guardadas</h6>
+                                <p class="small text-muted mb-4">Utilize a pesquisa avançada e clique em "Guardar Pesquisa" na página de resultados.</p>
+                                <button class="btn btn-dark" type="button" onclick="document.getElementById('avancada-tab').click()">
+                                    Começar a Pesquisar
+                                </button>
+                            </div>
+                        }
+                    }
+                    else 
+                    {
+                        <div class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="fas fa-lock fa-2x text-muted opacity-50"></i>
+                            </div>
+                            <h5 class="mb-2">Guarde as suas pesquisas</h5>
+                            <p class="text-muted mb-4">Faça login para aceder aos seus filtros favoritos e receber alertas.</p>
+                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-dark px-4">Entrar ou Registar</a>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5" style="margin-top: 60px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h3 fw-bold">Veículos mais recentes</h2>
+        <a asp-controller="Anuncios" asp-action="Index" class="text-decoration-none text-dark fw-bold small">
+            Ver todos <i class="fas fa-arrow-right ms-1"></i>
+        </a>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var anuncio in Model.VeiculosEmDestaque) {
+            var imagensDoVeiculo = Model.ImagensDosVeiculos.Where(i => i.IdVeiculo == anuncio.IdVeiculo).OrderBy(i => i.OrdemExibicao).ToList();
+            var imgCapa = imagensDoVeiculo.FirstOrDefault(i => i.IsCapa) ?? imagensDoVeiculo.FirstOrDefault();
+            var imgUrl = imgCapa != null ? Url.Content(imgCapa.CaminhoFicheiro) : Url.Content("~/images/placeholder-anuncio.png");
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm border-0 anuncio-card-hover">
+                    <div class="position-relative">
+                        <img src="@imgUrl" class="card-img-top" alt="@anuncio.Titulo" style="height: 180px; object-fit: cover;">
+                    
+                        @* Keep your existing "Novo" badge logic if you like, 
+                           or replace/augment it with the time ago string.
+                        *@
+                        @if ((DateTime.UtcNow - anuncio.DataPublicacao).TotalDays < 3) {
+                            <span class="badge bg-dark position-absolute top-0 start-0 m-2">Novo</span>
+                        }
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title h6 fw-bold text-truncate">@anuncio.Titulo</h5>
+                        <h4 class="fw-bold mb-2">@anuncio.Preco.ToString("C0", new System.Globalization.CultureInfo("pt-PT"))</h4>
+                        <p class="card-text small text-muted mb-2">
+                            @anuncio.Veiculo.DataMatricula.Year • @anuncio.Veiculo.Combustivel.Nome • @anuncio.Veiculo.KmTotal.ToString("N0") km
+                        </p>
+                    
+                        @* --- MODIFIED SECTION START --- *@
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <p class="card-text small text-muted mb-0">
+                                <i class="fas fa-map-marker-alt me-1 text-danger"></i> @anuncio.LocalizacaoCidade
+                            </p>
+                            <small class="text-muted" style="font-size: 0.75rem;">
+                                <i class="far fa-clock me-1"></i> @anuncio.DataPublicacao.TempoDecorrido()
+                            </small>
+                        </div>
+                        @* --- MODIFIED SECTION END --- *@
+
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0">
+                        <a asp-controller="Anuncios" asp-action="Detalhes" asp-route-id="@anuncio.IdAnuncio" class="btn btn-outline-dark w-100 btn-sm">Ver Detalhes</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (!Model.VeiculosEmDestaque.Any()) {
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">Ainda não há veículos em destaque.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="locationModalLabel">Selecionar Localização</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-8">
+                        <label class="form-label small text-muted">Pesquisar Distrito</label>
+                        <div class="position-relative">
+                            <input type="text" id="locationSearchInput" class="form-control" placeholder="Ex: Lisboa, Faro, Porto..." autocomplete="off">
+                            <div id="searchResults" class="list-group position-absolute w-100 shadow" style="display:none; max-height: 200px; overflow-y: auto; z-index: 1000; top: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label small text-muted">Raio (km)</label>
+                        <select id="modalRadiusSelect" class="form-select">
+                            <option value="5" selected>5 km</option>
+                            <option value="10">10 km</option>
+                            <option value="30">30 km</option>
+                            <option value="50">50 km</option>
+                            <option value="100">100 km</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="mapContainer" style="height: 400px; width: 100%; border-radius: 8px; background: #aad3df;"></div>
+            </div>
+
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-dark px-4" id="btnConfirmLocation">Confirmar Seleção</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        /* --- 1. HERO SECTION & LAYOUT --- */
+        .hero-section {
+            background-color: #2C3035;
+            padding-bottom: 120px;
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            margin-top: -1rem !important; /* Ajuste para colar à navbar */
+        }
+
+        .search-container-wrapper {
+            margin-top: -80px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-card {
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+        }
+
+        /* --- 2. TABS & UI --- */
+        .nav-tabs-custom { border-bottom: 2px solid #eee; }
+        .nav-tabs-custom .nav-link { border: none; color: #6c757d; font-weight: 500; padding-bottom: 10px; }
+        .nav-tabs-custom .nav-link.active { color: #212529; border-bottom: 2px solid #212529; background: transparent; }
+        .nav-tabs-custom .nav-link:hover { color: #212529; }
+        .dashed-border { border-style: dashed; }
+        .anuncio-card-hover { transition: transform 0.2s ease; }
+        .anuncio-card-hover:hover { transform: translateY(-5px); }
+
+        /* --- 3. DUAL PRICE SLIDER (PREMIUM) --- */
+        .range-slider-container {
+            width: 100%;
+            height: 20px; /* Altura da área clicável */
+            display: flex;
+            align-items: center;
+        }
+
+        /* Linha de fundo (Cinzenta) */
+        .slider-track-bg {
+            position: absolute;
+            width: 100%;
+            height: 6px;
+            background-color: #dee2e6;
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        /* Linha de preenchimento (Preta) */
+        .slider-track-fill {
+            position: absolute;
+            height: 6px;
+            background-color: #2C3035;
+            border-radius: 5px;
+            z-index: 2;
+        }
+
+        /* Os inputs invisíveis */
+        .double-range {
+            position: absolute;
+            width: 100%;
+            background: none;
+            pointer-events: none; /* Permite clicar através da barra */
+            -webkit-appearance: none;
+            z-index: 3;
+            margin: 0;
+        }
+
+        /* Estilo da "Bolinha" (Thumb) - Chrome/Safari */
+        .double-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background-color: #2C3035;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            pointer-events: auto; /* Reativa o clique na bolinha */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+        .double-range::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+        /* Estilo da "Bolinha" (Thumb) - Firefox */
+        .double-range::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background-color: #2C3035;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            pointer-events: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hover-opacity-100:hover {
+            opacity: 1 !important;
+            transform: scale(1.1); /* Ligeiro zoom ao passar o rato */
+            transition: all 0.2s;
+        }
+        .opacity-75 {
+            opacity: 0.6; /* Começa um pouco mais claro */
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ----------------------------------------------------
+            // 1. FILTRAGEM DINÂMICA DE MODELOS
+            // ----------------------------------------------------
+            const marcaDropdown = document.getElementById('marca-dropdown');
+            const modeloDropdown = document.getElementById('modelo-dropdown');
+
+            if(marcaDropdown && modeloDropdown) {
+                const todosOsModelos = Array.from(modeloDropdown.options);
+
+                function atualizarModelos() {
+                    const selectedMarcaId = marcaDropdown.value;
+                    
+                    modeloDropdown.innerHTML = '';
+                    modeloDropdown.appendChild(todosOsModelos[0]); 
+
+                    if (!selectedMarcaId) {
+                        modeloDropdown.disabled = true;
+                        modeloDropdown.value = "";
+                        return;
+                    }
+
+                    const modelosFiltrados = todosOsModelos.filter(function(option) {
+                        if (!option.dataset.marcaId) return false;
+                        return option.dataset.marcaId === selectedMarcaId;
+                    });
+
+                    modelosFiltrados.forEach(function(modeloOption) {
+                        modeloDropdown.appendChild(modeloOption.cloneNode(true));
+                    });
+
+                    modeloDropdown.disabled = false;
+                }
+
+                marcaDropdown.addEventListener('change', atualizarModelos);
+                atualizarModelos();
+            }
+
+            // ----------------------------------------------------
+            // 2. VALIDAÇÃO DE ANOS (NOVO CÓDIGO AQUI)
+            // ----------------------------------------------------
+            const anoDesdeSelect = document.getElementById('ano-desde');
+            const anoAteSelect = document.getElementById('ano-ate');
+
+            if (anoDesdeSelect && anoAteSelect) {
+                
+                function atualizarAnoAte() {
+                    const anoInicio = parseInt(anoDesdeSelect.value);
+
+                    // Se não houver ano de início selecionado, ativa tudo
+                    if (!anoInicio) {
+                        Array.from(anoAteSelect.options).forEach(opt => opt.disabled = false);
+                        return;
+                    }
+
+                    // Percorre as opções do "Ano Até"
+                    Array.from(anoAteSelect.options).forEach(opt => {
+                        const anoOpcao = parseInt(opt.value);
+                        
+                        // Se for a opção padrão "Até" (sem valor), ignora
+                        if (!opt.value) return;
+
+                        // Desativa se o ano for menor que o ano de início
+                        if (anoOpcao < anoInicio) {
+                            opt.disabled = true;
+                            // Se estava selecionado, limpa a seleção
+                            if (anoAteSelect.value == anoOpcao) {
+                                anoAteSelect.value = "";
+                            }
+                        } else {
+                            opt.disabled = false;
+                        }
+                    });
+                }
+
+                // Dispara sempre que mudar o "Ano Desde"
+                anoDesdeSelect.addEventListener('change', atualizarAnoAte);
+                
+                // Corre ao iniciar para garantir consistência
+                atualizarAnoAte();
+            }
+
+            // ----------------------------------------------------
+            // 3. LÓGICA DO DUAL PRICE SLIDER
+            // ----------------------------------------------------
+            const sliderMin = document.getElementById('sliderMin');
+            const sliderMax = document.getElementById('sliderMax');
+            const inputMin = document.getElementById('inputMin');
+            const inputMax = document.getElementById('inputMax');
+            const trackFill = document.getElementById('trackFill');
+            
+            const minGap = 1000; 
+            
+            if (sliderMin && sliderMax) {
+                const sliderMaxValue = parseInt(sliderMin.max);
+
+                function updateSliderVisuals() {
+                    let val1 = parseInt(sliderMin.value);
+                    let val2 = parseInt(sliderMax.value);
+
+                    // Lógica de colisão (impede que se cruzem)
+                    if (val2 - val1 < minGap) {
+                        if (this === sliderMin) {
+                            sliderMin.value = val2 - minGap;
+                            val1 = val2 - minGap;
+                        } else {
+                            sliderMax.value = val1 + minGap;
+                            val2 = val1 + minGap;
+                        }
+                    }
+
+                    inputMin.value = val1;
+                    inputMax.value = val2;
+
+                    const percent1 = (val1 / sliderMaxValue) * 100;
+                    const percent2 = (val2 / sliderMaxValue) * 100;
+                    
+                    trackFill.style.left = percent1 + "%";
+                    trackFill.style.width = (percent2 - percent1) + "%";
+                }
+
+                function syncInputsToSlider() {
+                    let val1 = parseInt(inputMin.value) || 0;
+                    let val2 = parseInt(inputMax.value) || sliderMaxValue;
+
+                    if (val1 < 0) val1 = 0;
+                    if (val2 > sliderMaxValue) val2 = sliderMaxValue;
+                    // Garante o gap também ao digitar
+                    if (val1 >= val2 - minGap) val1 = val2 - minGap;
+
+                    sliderMin.value = val1;
+                    sliderMax.value = val2;
+                    
+                    // Atualiza a barra visual
+                    const percent1 = (val1 / sliderMaxValue) * 100;
+                    const percent2 = (val2 / sliderMaxValue) * 100;
+                    trackFill.style.left = percent1 + "%";
+                    trackFill.style.width = (percent2 - percent1) + "%";
+                }
+
+                sliderMin.addEventListener('input', updateSliderVisuals);
+                sliderMax.addEventListener('input', updateSliderVisuals);
+                inputMin.addEventListener('change', syncInputsToSlider);
+                inputMax.addEventListener('change', syncInputsToSlider);
+                
+                updateSliderVisuals();
+            }
+
+            // ----------------------------------------------------
+            // 4. MAPA (Mantém o teu código de mapa aqui igual)
+            // ----------------------------------------------------
+            // ... (Copiar o código do mapa que já tinhas) ...
+            // Para não ficar gigante aqui, assume-se que o código do Leaflet
+            // continua aqui igual ao que te dei anteriormente.
+            
+            // ... código do mapa ...
+             let map, marker, circle;
+            let todosLocais = []; 
+            
+            const portugalOption = { 
+                name: "Portugal (Todo o País)", 
+                lat: 39.55, 
+                lng: -7.85, 
+                type: "pais" 
+            };
+
+            const modalElement = document.getElementById('locationModal');
+            const searchInput = document.getElementById('locationSearchInput');
+            const resultsList = document.getElementById('searchResults');
+            const radiusSelect = document.getElementById('modalRadiusSelect');
+
+            // CARREGAR JSON
+            fetch('/dados/locais.json')
+                .then(r => r.json())
+                .then(data => todosLocais = data)
+                .catch(e => console.error('Erro JSON (verificar se o ficheiro existe em wwwroot/dados):', e));
+
+            // INICIALIZAR MAPA
+            if (modalElement) {
+                modalElement.addEventListener('shown.bs.modal', function () {
+                    if (!map) {
+                        // Limites do Continente
+                        const bounds = L.latLngBounds([36.5, -10.0], [42.5, -5.0]);
+                        
+                        map = L.map('mapContainer', {
+                            center: [39.55, -7.85],
+                            zoom: 7,
+                            minZoom: 6,
+                            maxBounds: bounds,
+                            zoomControl: false 
+                        });
+                        
+                        L.control.zoom({ position: 'bottomright' }).addTo(map);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; OpenStreetMap contributors'
+                        }).addTo(map);
+                    }
+                    
+                    // Fix para o mapa renderizar corretamente dentro do modal
+                    setTimeout(function() { map.invalidateSize(); }, 100);
+                });
+            }
+
+            // PESQUISA
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.toLowerCase();
+                    resultsList.innerHTML = '';
+                    
+                    // Reativar raio se apagar texto
+                    if (query.length === 0) radiusSelect.disabled = false;
+
+                    if (query.length < 2 || todosLocais.length === 0) { 
+                        resultsList.style.display = 'none'; 
+                        return; 
+                    }
+
+                    let matches = todosLocais.filter(d => d.name.toLowerCase().includes(query));
+                    matches = matches.slice(0, 10);
+
+                    // Adicionar "Portugal"
+                    if ("portugal".includes(query) || "todo".includes(query) || "pais".includes(query)) {
+                        matches.unshift(portugalOption);
+                    }
+
+                    if (matches.length > 0) {
+                        resultsList.style.display = 'block';
+                        matches.forEach(d => {
+                            const item = document.createElement('a');
+                            item.className = 'list-group-item list-group-item-action d-flex align-items-center justify-content-between';
+                            item.href = '#';
+                            
+                            let icon, badge;
+                            if (d.type === 'pais') {
+                                icon = '<i class="fas fa-globe-europe text-success me-2 fa-lg"></i>';
+                                badge = '<span class="badge bg-success ms-auto">Nacional</span>';
+                            } else if (d.type === 'distrito') {
+                                icon = '<i class="fas fa-city text-primary me-2"></i>';
+                                badge = '<span class="badge bg-light text-dark border small ms-auto">Distrito</span>';
+                            } else {
+                                icon = '<i class="fas fa-map-marker-alt text-danger me-2"></i>';
+                                badge = '<span class="badge bg-light text-muted border small ms-auto">Concelho</span>';
+                            }
+
+                            item.innerHTML = `<div>${icon} <span class="fw-bold">${d.name}</span></div> ${badge}`;
+                            
+                            item.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                selectLocation(d);
+                            });
+                            resultsList.appendChild(item);
+                        });
+                    } else {
+                        resultsList.style.display = 'none';
+                    }
+                });
+            }
+
+            // Variável para guardar a seleção atual temporariamente
+            let selectedLocationData = null;
+
+            // SELEÇÃO
+            function selectLocation(local) {
+                searchInput.value = local.name;
+                resultsList.style.display = 'none';
+
+                selectedLocationData = local;
+
+                // MODO PAÍS
+                if (local.type === 'pais') {
+                    if (marker) map.removeLayer(marker);
+                    if (circle) map.removeLayer(circle);
+                    marker = null;
+                    circle = null;
+                    
+                    map.setView([39.55, -7.85], 7);
+                    
+                    // DESLIGAR RAIO
+                    radiusSelect.value = "0";      
+                    radiusSelect.disabled = true; 
+                    return;
+                }
+
+                // MODO LOCAL
+                radiusSelect.disabled = false; // Reativa o raio
+                
+                if (marker) map.removeLayer(marker);
+                marker = L.marker([local.lat, local.lng]).addTo(map);
+                
+                updateCircle(local.lat, local.lng);
+                
+                const zoomLevel = local.type === 'distrito' ? 9 : 11;
+                map.setView([local.lat, local.lng], zoomLevel);
+            }
+
+            function updateCircle(lat, lng) {
+                if (circle) map.removeLayer(circle);
+                if (!marker) return;
+
+                const r = parseInt(radiusSelect.value);
+                if (r > 0) {
+                    circle = L.circle([lat, lng], {
+                        color: '#0d6efd',
+                        fillColor: '#0d6efd',
+                        fillOpacity: 0.2,
+                        radius: r * 1000
+                    }).addTo(map);
+                    map.fitBounds(circle.getBounds());
+                }
+            }
+
+            if (radiusSelect) {
+                radiusSelect.addEventListener('change', function() {
+                    if(marker) {
+                        const ll = marker.getLatLng();
+                        updateCircle(ll.lat, ll.lng);
+                    }
+                });
+            }
+
+            // CONFIRMAR
+            const btnConfirm = document.getElementById('btnConfirmLocation');
+            if (btnConfirm) {
+                btnConfirm.addEventListener('click', function() {
+                    // Se não tiver nada selecionado, assume Portugal
+                    if (!selectedLocationData) {
+                         selectedLocationData = { name: "", lat: null, lng: null }; 
+                    }
+
+                    const r = radiusSelect.disabled ? 0 : parseInt(radiusSelect.value);
+                    let displayText = selectedLocationData.name || "Portugal (Todo o País)";
+        
+                    // Atualizar visual
+                    if (r > 0 && selectedLocationData.name) {
+                        displayText += ` + ${r} km`;
+                    }
+                    document.getElementById('mainLocationDisplay').value = displayText;
+
+                    // ATUALIZAR INPUTS HIDDEN (Isto é o que vai para o servidor)
+                    document.getElementById('hiddenLocationName').value = selectedLocationData.name;
+                    document.getElementById('hiddenRadius').value = r; // 0 se for país ou sem raio
+        
+                    // Enviar coordenadas apenas se for uma cidade específica
+                    if (selectedLocationData.lat && selectedLocationData.lng) {
+                        document.getElementById('hiddenLat').value = selectedLocationData.lat;
+                        document.getElementById('hiddenLng').value = selectedLocationData.lng;
+                    } else {
+                        document.getElementById('hiddenLat').value = "";
+                        document.getElementById('hiddenLng').value = "";
+                    }
+        
+                    bootstrap.Modal.getInstance(modalElement).hide();
+                });
+            }
+
+            // Fechar ao clicar fora
+            document.addEventListener('click', (e) => {
+                if (searchInput && resultsList) {
+                    if (!searchInput.contains(e.target) && !resultsList.contains(e.target)) {
+                        resultsList.style.display = 'none';
+                    }
+                }
+            });
+        });
+    </script>
+}

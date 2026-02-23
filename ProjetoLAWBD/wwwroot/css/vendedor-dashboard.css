@@ -1,0 +1,275 @@
+﻿/* ===================================================================
+   Estilos da Dashboard do Vendedor (Fiel ao Mockup)
+   =================================================================== */
+
+/* 1. O WRAPPER PRINCIPAL (O "Frame" escuro)
+     Isto substitui o fundo branco do body APENAS nesta página,
+     dando o aspeto de "frame" do mockup.
+*/
+.dashboard-vendedor-wrapper {
+    /* Garante que ocupa a altura toda */
+    min-height: calc(100vh - 76px); /* Altura do ecrã - header/footer (ajuste 76px) */
+    /* Adiciona padding para o conteúdo "flutuar" no meio */
+    padding-top: 1rem;
+    padding-bottom: 3rem;
+}
+
+    /* Força o container-fluid dentro do nosso wrapper 
+   a ter o padding correto, alinhando com o _Layout principal.
+   Isto evita que o conteúdo cole nas bordas.
+*/
+    .dashboard-vendedor-wrapper > .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+        max-width: 1600px; /* ou a largura do seu container principal */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
+/* 2. O CONTEÚDO PRINCIPAL (O fundo cinza-claro) */
+.dashboard-main-content {
+    background-color: #F8F9FA;
+    border-top-left-radius: 8px; /* O canto arredondado do mockup */
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    min-height: calc(100vh - 100px); /* Garante que o fundo cinza se estende */
+}
+
+/* Em ecrãs pequenos, o conteúdo também deve ter um canto arredondado */
+@media (max-width: 767px) {
+    .dashboard-main-content {
+        border-top-right-radius: 8px;
+    }
+}
+
+
+/* 3. A SIDEBAR (O "card" branco) */
+.sidebar-vendedor {
+    /* Faz com que o card não cole no conteúdo principal em ecrãs médios */
+    padding-right: 1.5rem;
+}
+
+.sidebar-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: sticky;
+    top: 1.5rem; /* Descola do topo */
+}
+
+/* 4. Estilos dos Componentes (User, Nav, Stats) */
+
+.user-avatar {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    background-color: #e9ecef;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-placeholder {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #adb5bd;
+}
+
+.nav-vendedor .nav-link {
+    color: #343a40;
+    font-weight: 500;
+    padding: 0.75rem 0.5rem;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+    .nav-vendedor .nav-link:hover {
+        background-color: #f8f9fa;
+    }
+
+    .nav-vendedor .nav-link.active {
+        background-color: #f0f1f2 !important;
+        color: black !important;
+        font-weight: 600;
+    }
+
+.nav-sub-menu {
+    padding-left: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+    .nav-sub-menu .nav-link {
+        font-size: 0.85rem;
+        padding-top: 0.4rem;
+        padding-bottom: 0.4rem;
+        color: #6c757d; /* Cor cinza (inativo) */
+    }
+
+        .nav-sub-menu .nav-link.active-sub {
+            font-weight: 700; /* Fica a negrito */
+        }
+
+.nav-sub-menu > li
+.stat-card {
+    border: none;
+    border-radius: 8px;
+}
+
+    .stat-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .stat-card .stat-title {
+        font-size: 0.9rem;
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .stat-card .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #212529;
+        margin-top: 0.25rem;
+        margin-bottom: 0;
+    }
+
+/* 5. Estilos das Tabs (Ativos, Pausados...) */
+.nav-tabs-custom {
+    border-bottom: 2px solid #dee2e6;
+}
+
+    .nav-tabs-custom .nav-link {
+        border: none;
+        border-bottom: 2px solid transparent;
+        color: #6c757d;
+        font-weight: 500;
+        padding-bottom: 0.75rem;
+        margin-bottom: -2px;
+    }
+
+        .nav-tabs-custom .nav-link.active {
+            border-bottom-color: #0d6efd;
+            color: #212529;
+        }
+
+        .nav-tabs-custom .nav-link:hover {
+            border-bottom-color: #adb5bd;
+            color: #212529;
+        }
+
+
+/* 6. Estilos do Cartão de Anúncio */
+.anuncio-card {
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    background-color: #ffffff; /* Fundo branco explícito */
+}
+
+.anuncio-img-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    min-height: 200px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.anuncio-img-placeholder {
+    color: #adb5bd;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.anuncio-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+@media (max-width: 991px) {
+    .anuncio-img, .anuncio-img-container {
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 8px;
+    }
+}
+
+.anuncio-card .card-body {
+    padding: 1.5rem;
+}
+
+.anuncio-info {
+    flex: 1;
+}
+
+.anuncio-card .card-title {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.anuncio-card .card-price {
+    color: #212529;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.anuncio-botoes {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+@media (max-width: 767px) {
+    .anuncio-botoes {
+        width: 100%;
+        flex-direction: column;
+    }
+
+        .anuncio-botoes .btn, .anuncio-botoes form {
+            width: 100%;
+        }
+}
+
+
+/* Badges de Status (À Venda / Não Listado) */
+
+.badge.bg-success-soft {
+    background-color: rgba(25, 135, 84, 0.1); /* Fundo verde-claro */
+    padding: 0.35em 0.65em;
+}
+
+.badge.text-success {
+    color: #198754 !important; /* Texto verde-escuro */
+}
+
+.badge.bg-secondary-soft {
+    background-color: rgba(108, 117, 125, 0.1); /* Fundo cinza-claro */
+    padding: 0.35em 0.65em;
+}
+
+.badge.text-secondary {
+    color: #6c757d !important; /* Texto cinza-escuro */
+}
+
+.badge.bg-warning-soft {
+    background-color: rgba(255, 193, 7, 0.1); /* Fundo amarelo-claro */
+    padding: 0.35em 0.65em;
+}
+
+.badge.text-warning-dark {
+    color: #997404 !important; /* Texto amarelo-escuro */
+}
+
+.user-profile h5 {
+    /* Estas duas propriedades forçam o texto a quebrar
+    em vez de transbordar (overflow).
+  */
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+

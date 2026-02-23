@@ -1,0 +1,92 @@
+﻿@model List<ProjetoLAWBD.ViewModels.ItemAgendamentoViewModel>
+
+@foreach (var item in Model) {
+    <div class="card mb-3 shadow-sm border-0 bg-white" style="border-radius: 12px; border: 1px solid #f0f0f0 !important;">
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h5 class="fw-bold mb-2 text-dark">@item.NomeModelo</h5>
+
+                    @if (item.Estado == "Aprovada") {
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3">
+                            <i class="fas fa-check-circle me-1"></i>@item.Tipo.ToUpper() APROVADA
+                        </span>
+                    }
+                    else {
+                        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3" style="color: #997404 !important;">
+                            <i class="fas fa-clock me-1"></i>@item.Tipo.ToUpper() PENDENTE
+                        </span>
+                    }
+                </div>
+
+                <a asp-action="Detalhes" asp-controller="Anuncios" asp-route-id="@item.IdAnuncio" target="_blank"
+                   class="btn btn-outline-secondary btn-sm rounded-pill px-3"
+                   title="Ver detalhes do carro">
+                    Ver Anúncio <i class="fas fa-external-link-alt ms-1 small"></i>
+                </a>
+            </div>
+
+            <hr class="text-muted opacity-10 my-3">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    @if (item.Tipo == "Visita") {
+                        <div class="d-flex align-items-center text-muted">
+                            <div>
+                                <small class="d-block text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">Data da Visita</small>
+                                <span class="fw-bold text-dark">@item.DataEvento.ToString("dd MMM yyyy")</span>
+                                <span class="text-muted small">às @item.DataEvento.ToString("HH:mm")</span>
+                            </div>
+                        </div>
+                    }
+                    else {
+                        <div class="d-flex align-items-center text-muted">
+                            <div>
+                                <small class="d-block text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">Reserva Válida Até</small>
+                                <span class="fw-bold text-dark">@item.DataEvento.ToString("dd/MM/yyyy")</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <form asp-action="CancelarAgendamento" asp-controller="Comprador" method="post"
+                      data-ajax="true"
+                      data-ajax-method="post"
+                      data-ajax-mode="replace"
+                      data-ajax-update="#lista-ativas"
+                      data-ajax-confirm="Tem a certeza que deseja cancelar esta @item.Tipo.ToLower()?">
+
+                    <input type="hidden" name="id" value="@item.Id" />
+                    <input type="hidden" name="tipo" value="@item.Tipo" />
+
+                    <button type="submit" class="btn btn-link text-danger text-decoration-none px-0 btn-sm hover-scale">
+                        Cancelar @item.Tipo
+                    </button>
+                </form>
+            </div>
+
+            <div class="text-end mt-1">
+                <small class="text-muted fst-italic" style="font-size: 0.7rem;">Pedido criado em @item.DataPedido.ToString("dd/MM/yyyy")</small>
+            </div>
+
+        </div>
+    </div>
+}
+
+@if (!Model.Any()) {
+    <div class="text-center p-5 bg-white border rounded-3 shadow-sm">
+        <div class="mb-3 text-muted opacity-25">
+            <i class="far fa-calendar-times fa-3x"></i>
+        </div>
+        <h6 class="fw-bold text-muted">Sem agendamentos ativos</h6>
+        <p class="small text-muted mb-0">As suas visitas e reservas aparecerão aqui.</p>
+    </div>
+}
+
+<style>
+    .hover-scale:hover {
+        transform: scale(1.05);
+        font-weight: bold;
+    }
+</style>

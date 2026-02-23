@@ -1,0 +1,124 @@
+﻿.registration-container {
+    /* Posicionamento: Centrado na página com margens */
+    max-width: 450px;
+    margin: 5rem auto; /* 5rem em cima/baixo, centrado horizontalmente */
+    /* Estilo do "Card" */
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+    .registration-container h2 {
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    /* O parágrafo de subtítulo (ex: "Junte-se a nós...") */
+    .registration-container > form > p {
+        text-align: center;
+        color: #6c757d; /* cinza */
+        margin-bottom: 1.5rem;
+    }
+
+.alert-danger {
+    /* Ajusta as cores para o seu mockup se desejar */
+    background-color: #f8d7da; /* Fundo vermelho claro */
+    border-color: #f5c2c7;
+    color: #842029; /* Texto vermelho escuro */
+}
+
+    .alert-danger strong {
+        color: #842029;
+    }
+
+.button-submit {
+    background-color: #2d3748;
+    border: none;
+}
+
+    .button-submit:hover {
+        background-color: #202733;
+    }
+/* ===================================================================
+   Separador "ou continue com"
+   =================================================================== */
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 1.5rem 0; /* Espaçamento acima e abaixo */
+}
+
+    /* As linhas laterais */
+    .separator::before,
+    .separator::after {
+        content: '';
+        flex: 1; /* Faz as linhas crescerem para preencher o espaço */
+        border-bottom: 1px solid #dee2e6; /* Cor da linha */
+    }
+
+    .separator:not(:empty)::before {
+        margin-right: .5em; /* Espaço entre a linha e o texto */
+    }
+
+    .separator:not(:empty)::after {
+        margin-left: .5em; /* Espaço entre o texto e a linha */
+    }
+
+
+/* ===================================================================
+   Botões de Login Externo (Google, Facebook)
+   =================================================================== */
+
+.external-login-buttons {
+    display: grid;
+    gap: 0.75rem; /* Espaço entre os botões */
+    /* Por defeito, os botões ficam lado a lado */
+    grid-template-columns: 1fr 1fr;
+}
+
+/* Em ecrãs muito pequenos, os botões empilham */
+@media (max-width: 575px) {
+    .external-login-buttons {
+        grid-template-columns: 1fr; /* Uma coluna */
+    }
+}
+
+/* Estilo de cada botão externo */
+.btn-external {
+    padding: 0.6rem;
+    border-radius: 6px;
+    font-weight: 600;
+    border: 1px solid #ced4da; /* Borda cinza clara */
+    background-color: #fff;
+    color: #212529; /* Texto escuro */
+    transition: background-color 0.2s;
+}
+
+    .btn-external:hover {
+        background-color: #f8f9fa; /* Fundo cinza muito claro ao passar o rato */
+    }
+
+
+/* ===================================================================
+   Links Inferiores ("Já tem uma conta?", etc.)
+   =================================================================== */
+
+.login-links {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+    .login-links p {
+        margin-bottom: 0.5rem;
+    }
+
+    .login-links a {
+        font-weight: 600;
+        text-decoration: none;
+    }

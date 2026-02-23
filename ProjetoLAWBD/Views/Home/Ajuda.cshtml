@@ -1,0 +1,134 @@
+﻿@{
+    ViewData["Title"] = "Centro de Ajuda";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <div class="text-center mb-5">
+                <h1 class="h2">@ViewData["Title"]</h1>
+                <p class="text-muted">Como podemos ajudá-lo hoje?</p>
+                <p>
+                    Não encontrou a sua resposta?
+                    <a asp-controller="Home" asp-action="Contactos">Fale connosco</a>.
+                </p>
+            </div>
+
+            <!-- QUESTÕES GERAIS E DE CONTA -->
+            <h3 class="h4 mb-3">Questões Gerais e de Conta</h3>
+            <div class="accordion mb-4" id="accordionGeral">
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingGeral1">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGeral1" aria-expanded="false" aria-controls="collapseGeral1">
+                            Como crio uma conta?
+                        </button>
+                    </h2>
+                    <div id="collapseGeral1" class="accordion-collapse collapse" aria-labelledby="headingGeral1" data-bs-parent="#accordionGeral">
+                        <div class="accordion-body">
+                            <p>No nosso site, existem dois tipos de contas: <strong>Comprador</strong> e <strong>Vendedor</strong>. As contas são separadas e requerem emails diferentes.</p>
+                            <ul>
+                                <li>Se deseja comprar veículos, <a asp-area="Identity" asp-page="/Account/RegisterSeller">crie uma conta de Comprador</a>.</li>
+                                <li>Se deseja vender veículos, <a asp-area="Identity" asp-page="/Account/RegisterSeller">crie uma conta de Vendedor</a>.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingGeral2">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGeral2" aria-expanded="false" aria-controls="collapseGeral2">
+                            Esqueci-me da minha palavra-passe. O que faço?
+                        </button>
+                    </h2>
+                    <div id="collapseGeral2" class="accordion-collapse collapse" aria-labelledby="headingGeral2" data-bs-parent="#accordionGeral">
+                        <div class="accordion-body">
+                            Pode redefinir a sua palavra-passe a qualquer momento. Na página de <a asp-area="Identity" asp-page="/Account/Login">Login</a>, clique no link "Esqueceu a palavra-passe?". Iremos enviar-lhe um email com um link seguro para criar uma nova.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARA VENDEDORES -->
+            <h3 class="h4 mt-5 mb-3">Para Vendedores</h3>
+            <div class="accordion mb-4" id="accordionVendedor">
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingVendedor1">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVendedor1" aria-expanded="false" aria-controls="collapseVendedor1">
+                            Qual a diferença entre "Veículo" e "Anúncio"?
+                        </button>
+                    </h2>
+                    <div id="collapseVendedor1" class="accordion-collapse collapse" aria-labelledby="headingVendedor1" data-bs-parent="#accordionVendedor">
+                        <div class="accordion-body">
+                            <ul>
+                                <li><strong>Os Meus Veículos:</strong> É o seu "inventário" ou "stock" privado. Um veículo que adiciona aqui não está público.</li>
+                                <li><strong>Os Meus Anúncios:</strong> É a "listagem" pública de venda. Um anúncio é o que os compradores veem e está ligado a um veículo do seu inventário.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingVendedor2">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVendedor2" aria-expanded="false" aria-controls="collapseVendedor2">
+                            O que significam os estados dos anúncios (Ativo, Pausado, etc.)?
+                        </button>
+                    </h2>
+                    <div id="collapseVendedor2" class="accordion-collapse collapse" aria-labelledby="headingVendedor2" data-bs-parent="#accordionVendedor">
+                        <div class="accordion-body">
+                            <ul>
+                                <li><strong>Ativos:</strong> O seu anúncio está público e visível.</li>
+                                <li><strong>Pausados:</strong> O anúncio não está visível para o público, mas continua na sua dashboard. Pode "Ativar" ou "Remover" (arquivar) um anúncio.</li>
+                                <li><strong>Vendidos:</strong> O seu histórico de vendas.</li>
+                                <li><strong>Arquivados:</strong> O seu "caixote do lixo". Anúncios Pausados ou Vendidos que limpou vêm para aqui.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARA COMPRADORES -->
+            <h3 class="h4 mt-5 mb-3">Para Compradores</h3>
+            <div class="accordion mb-4" id="accordionComprador">
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingComprador1">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComprador1" aria-expanded="false" aria-controls="collapseComprador1">
+                            Como posso agendar uma visita ou fazer uma reserva?
+                        </button>
+                    </h2>
+                    <div id="collapseComprador1" class="accordion-collapse collapse" aria-labelledby="headingComprador1" data-bs-parent="#accordionComprador">
+                        <div class="accordion-body">
+                            <p>Quando encontrar um anúncio de que gosta, e se estiver logado com a sua conta de Comprador, verá os botões para "Agendar Visita" ou "Fazer Reserva" (se o vendedor disponibilizar essa opção). Basta seguir os passos indicados.</p>
+                            <ul>
+                                <li><strong>Agendar Visita:</strong> Permite-lhe propor uma data e hora para ver o veículo pessoalmente. O vendedor terá de aprovar o seu pedido.</li>
+                                <li><strong>Fazer Reserva:</strong> É um pedido formal para que o vendedor "guarde" o carro para si durante um período. Se o vendedor aprovar, o anúncio aparecerá como "Reservado" para outros utilizadores.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingComprador2">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComprador2" aria-expanded="false" aria-controls="collapseComprador2">
+                            Como funcionam os Filtros Guardados e as Marcas Favoritas?
+                        </button>
+                    </h2>
+                    <div id="collapseComprador2" class="accordion-collapse collapse" aria-labelledby="headingComprador2" data-bs-parent="#accordionComprador">
+                        <div class="accordion-body">
+                            <p>Para o ajudar a encontrar o seu carro de sonho, oferecemos duas ferramentas na sua futura área pessoal de comprador:</p>
+                            <ul>
+                                <li><strong>Marcas Favoritas:</strong> Pode adicionar marcas (ex: "BMW", "Audi") à sua lista de favoritos. Estamos a trabalhar em notificações para quando novos carros dessa marca forem adicionados.</li>
+                                <li><strong>Filtros Guardados:</strong> Se fez uma pesquisa muito específica (ex: "BMW Série 3, Preto, Automático, de 2019 a 2021"), pode guardar esse filtro para o reutilizar rapidamente mais tarde, sem ter de preencher tudo de novo.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

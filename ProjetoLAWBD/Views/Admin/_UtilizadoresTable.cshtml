@@ -1,0 +1,81 @@
+﻿@model ProjetoLAWBD.ViewModels.GerirUtilizadoresViewModel
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<table class="table table-hover align-middle">
+    <thead>
+        <tr>
+            <th>NOME</th>
+            <th>EMAIL</th>
+            <th>TIPO</th>
+            <th>ESTADO</th>
+            <th class="text-end">AÇÕES</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Utilizadores)
+        {
+            <tr>
+                <td>@user.Nome</td>
+                <td>@user.Email</td>
+                <td>@user.Tipo</td>
+                <td>
+                    <span class="badge @(user.Estado == "Ativo" ? "bg-success" : "bg-danger")">
+                        @user.Estado.ToUpper()
+                    </span>
+                </td>
+                <td class="text-end">
+                    <a asp-action="GetUserData" asp-route-id="@user.Id" class="btn btn-link btn-sm">Ver</a>
+
+                    @if (user.Tipo != "Administrador")
+                    {
+                        @if (user.Estado == "Ativo")
+                        {
+                            <button type="button" class="btn btn-link btn-sm text-danger"
+                                    data-bs-toggle="modal" data-bs-target="#bloquearModal"
+                                    data-userid="@user.Id" data-username="@user.Nome">
+                                Bloquear
+                            </button>
+                        }
+                        else
+                        {
+                            <form asp-action="Desbloquear" method="post" class="d-inline"
+                                  data-ajax="true" data-ajax-method="POST" data-ajax-update="#tabelaUtilizadoresContainer">
+                                <input type="hidden" name="id" value="@user.Id" />
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-link btn-sm text-success">Desbloquear</button>
+                            </form>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="text-center mt-3">
+    <nav>
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= Model.TotalPaginas; i++)
+            {
+                <li class="page-item @(i == Model.PaginaAtual ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="GerirUtilizadores"
+                       asp-route-pagina="@i"
+                       asp-route-filtroTipo="@Model.FiltroTipo"
+                       asp-route-filtroEstado="@Model.FiltroEstado"
+                       data-ajax="true"
+                       data-ajax-method="GET"
+                       data-ajax-update="#tabelaUtilizadoresContainer">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+    <small class="text-muted">Página @Model.PaginaAtual de @Model.TotalPaginas</small>
+</div>

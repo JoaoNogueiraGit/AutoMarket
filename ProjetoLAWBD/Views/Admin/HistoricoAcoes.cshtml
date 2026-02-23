@@ -1,0 +1,142 @@
+﻿@model ProjetoLAWBD.ViewModels.HistoricoAcoesViewModel
+@{
+    ViewData["Title"] = "Histórico de Ações";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml"; 
+}
+
+<h1 class="mt-3">Histórico de Ações Administrativas</h1>
+
+<form asp-action="HistoricoAcoes" method="get">
+    <div class="d-flex mb-3 align-items-center flex-wrap gap-2">
+
+        <select name="filtroAdminId" asp-for="FiltroAdmin" asp-items="Model.AdminOpcoes"
+                class="form-select" style="max-width: 250px;">
+        </select>
+
+        <select name="filtroTipoAcao" asp-for="FiltroTipoAcao" asp-items="Model.TipoAcaoOpcoes"
+                class="form-select" style="max-width: 250px;">
+        </select>
+
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <a asp-action="HistoricoAcoes" class="btn btn-link text-muted text-decoration-none">Limpar Filtros</a>
+    </div>
+</form>
+
+<div class="card shadow-sm anuncio-card">
+    <div class="card-body">
+        <table class="table table-hover align-middle" style="font-size: 0.9rem;">
+            <thead>
+                <tr>
+                    <th>DATA</th>
+                    <th>ADMINISTRADOR</th>
+                    <th>TIPO AÇÃO</th>
+                    <th>ALVO</th>
+                    <th>DESCRIÇÃO / DETALHES</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var acao in Model.Historico)
+                {
+                    <tr>
+                        <td style="white-space: nowrap;">
+                            @acao.DataAcao.ToString("dd/MM/yyyy HH:mm")
+                        </td>
+
+                        <td>
+                            @if (acao.AdministradorAutor != null && acao.AdministradorAutor.user != null)
+                            {
+                                <span class="fw-bold">@acao.AdministradorAutor.user.UserName</span>
+                            }
+                            else if (!string.IsNullOrEmpty(acao.IdAdministradorAutor))
+                            {
+                                <span class="text-muted" title="ID: @acao.IdAdministradorAutor">
+                                    Admin (Removido)
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-muted fst-italic">[Sistema]</span>
+                            }
+                        </td>
+
+                        <td>
+                            <span class="badge bg-light text-dark border">
+                                @acao.TipoAcao
+                            </span>
+                        </td>
+
+                        <td>
+                            @if (!string.IsNullOrEmpty(acao.EntidadeAlvo))
+                            {
+                                <span>@acao.EntidadeAlvo</span>
+                                @if (!string.IsNullOrEmpty(acao.IdEntidadeAlvo))
+                                {
+                                    <small class="text-muted d-block">ID: @acao.IdEntidadeAlvo</small>
+                                }
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+
+                        <td>
+                            @acao.Descricao
+                        </td>
+                    </tr>
+                }
+
+                @if (!Model.Historico.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted p-5">
+                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                            Não foram encontradas ações com os filtros selecionados.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="text-center text-muted mt-3">
+            <small>A mostrar @Model.Historico.Count registos</small>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    @if (Model.TotalPages > 1)
+    {
+        <nav aria-label="Paginação do histórico">
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-action="HistoricoAcoes"
+                       asp-route-pagina="@(Model.PageNumber - 1)"
+                       asp-route-filtroAdminId="@Model.FiltroAdmin"
+                       asp-route-filtroTipoAcao="@Model.FiltroTipoAcao">Anterior</a>
+                </li>
+
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                        <a class="page-link"
+                           asp-action="HistoricoAcoes"
+                           asp-route-pagina="@i"
+                           asp-route-filtroAdminId="@Model.FiltroAdmin"
+                           asp-route-filtroTipoAcao="@Model.FiltroTipoAcao">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-action="HistoricoAcoes"
+                       asp-route-pagina="@(Model.PageNumber + 1)"
+                       asp-route-filtroAdminId="@Model.FiltroAdmin"
+                       asp-route-filtroTipoAcao="@Model.FiltroTipoAcao">Próximo</a>
+                </li>
+            </ul>
+        </nav>
+    }
+</div>

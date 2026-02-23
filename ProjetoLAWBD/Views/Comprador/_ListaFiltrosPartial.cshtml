@@ -1,0 +1,39 @@
+﻿@model List<ProjetoLAWBD.ViewModels.PesquisaGuardadaViewmodel>
+
+@foreach (var filtro in Model)
+{
+    <div class="card mb-3 shadow-sm border-0 py-2" style="border-radius: 12px;">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <h6 class="fw-bold mb-1">@filtro.NomeFiltro</h6>
+                    <small class="text-muted">Guardada em: @filtro.DataCriacao.ToString("dd/MM/yyyy")</small>
+                </div>
+                <div class="d-flex gap-2">
+                    <a asp-controller="Anuncios"
+                       asp-action="CarregarFiltro"
+                       asp-route-id="@filtro.IdFiltro"
+                       class="btn btn-dark btn-sm px-4">
+                        Usar
+                    </a>
+
+                    <form asp-action="ApagarFiltro" data-ajax="true" data-ajax-method="post"
+                          data-ajax-mode="replace" data-ajax-update="#container-filtros"
+                          data-ajax-confirm="Tem a certeza que deseja apagar esta pesquisa?">
+                        <input type="hidden" name="id" value="@filtro.IdFiltro" />
+                        <button type="submit" class="btn btn-outline-danger btn-sm px-3">Apagar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                @foreach (var badge in filtro.Badges)
+                {
+                    <span class="badge rounded-pill bg-light text-dark border px-3 py-2 fw-normal" style="font-size: 0.75rem;">
+                        @badge
+                    </span>
+                }
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,98 @@
+﻿@model ProjetoLAWBD.ViewModels.ExibirUserDataViewModel
+@{
+    ViewData["Title"] = $"Detalhes do Utilizador: {Model.Username}";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml"; 
+}
+
+<div class="mb-3">
+    <a asp-action="GerirUtilizadores" class="btn btn-link px-0">
+        &larr; Voltar à Gestão de Utilizadores
+    </a>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="mb-0">@Model.Username</h1>
+        <span class="text-muted">ID: @Model.Id &bull; Tipo: @Model.Tipo</span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+
+        <div class="card shadow-sm anuncio-card mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Informações da Conta</h5>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p class="mb-1 text-muted">Username:</p>
+                        <p><strong>@Model.Username</strong></p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-1 text-muted">Email Principal:</p>
+                        <p><strong>@Model.Email</strong></p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-1 text-muted">Data de Registo:</p>
+                        <p><strong>@Model.DataRegisto.ToShortDateString()</strong></p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-1 text-muted">Estado da Conta:</p>
+                        @if (Model.Estado == "Ativo")
+                        {
+                            <span class="badge bg-success">ATIVO</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">BLOQUEADO</span>
+                        }
+                    </div>
+                </div>
+
+                @if (Model.MoradaUser != null)
+                {
+                    <hr />
+                    <h5 class="card-title mt-4 mb-3">Morada</h5>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p class="mb-1 text-muted">Rua:</p>
+                            <p><strong>@Model.MoradaUser.RuaENumero</strong></p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-1 text-muted">Código Postal:</p>
+                            <p><strong>@Model.MoradaUser.CodigoPostal</strong></p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-1 text-muted">Cidade:</p>
+                            <p><strong>@Model.MoradaUser.Cidade</strong></p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-1 text-muted">Distrito:</p>
+                            <p><strong>@Model.MoradaUser.Distrito</strong></p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <hr />
+                    <p class="text-muted mt-3">Este utilizador ainda não preencheu a morada.</p>
+                }
+
+                @if (Model.ContactosUser.Any())
+                {
+                    <hr />
+                    <h5 class="card-title mt-4 mb-3">Contactos Adicionais</h5>
+                    <div class="row">
+                        @foreach (var contacto in Model.ContactosUser)
+                        {
+                            <div class="col-sm-6">
+                                <p class="mb-1 text-muted">@contacto.TipoContacto:</p>
+                                <p><strong>@contacto.ValorContacto</strong></p>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

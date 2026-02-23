@@ -1,0 +1,408 @@
+﻿@model ProjetoLAWBD.ViewModels.VendedorMeusAnunciosViewModel
+
+@{
+
+    ViewData["Title"] = "Os Meus Anúncios";
+
+    Layout = "~/Views/Shared/_VendedorLayout.cshtml";
+
+
+
+
+
+}
+
+
+
+<h1 class="h2 pt-4" style="font-weight:bold">Os Meus Anúncios</h1>
+
+
+
+<div class="row mb-4">
+
+    <div class="col-xl-3 col-md-6 mb-3">
+
+        <div class="card stat-card shadow-sm">
+
+            <div class="card-body">
+
+                <span class="stat-title">Anúncios Ativos</span>
+
+                <h3 class="stat-value">@Model.AnunciosAtivos</h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-3">
+
+        <div class="card stat-card shadow-sm">
+
+            <div class="card-body">
+
+                <span class="stat-title">Veículos Vendidos</span>
+
+                <h3 class="stat-value">@Model.VeiculosVendidos</h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-3">
+
+        <div class="card stat-card shadow-sm">
+
+            <div class="card-body">
+
+                <span class="stat-title">Pedidos Pendentes</span>
+
+                <h3 class="stat-value">@Model.PedidosPendentes</h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<ul class="nav nav-tabs-custom">
+
+    <li class="nav-item">
+
+        <a class="nav-link @(Model.StatusAtual == "Ativos" ? "active" : "")"
+           asp-action="MeusAnuncios" asp-route-status="Ativos">
+
+            Ativos (@Model.AnunciosAtivos)
+
+        </a>
+
+    </li>
+
+    <li class="nav-item">
+
+        <a class="nav-link @(Model.StatusAtual == "Pausados" ? "active" : "")"
+           asp-action="MeusAnuncios" asp-route-status="Pausados">
+
+            Pausados (@Model.AnunciosPausados)
+
+        </a>
+
+    </li>
+
+    <li class="nav-item">
+
+        <a class="nav-link @(Model.StatusAtual == "Vendidos" ? "active" : "")"
+           asp-action="MeusAnuncios" asp-route-status="Vendidos">
+
+            Vendidos (@Model.VeiculosVendidos)
+
+        </a>
+
+    </li>
+
+    <li class="nav-item">
+
+        <a class="nav-link @(Model.StatusAtual == "Arquivados" ? "active" : "")"
+           asp-action="MeusAnuncios" asp-route-status="Arquivados">
+
+            Arquivados (@Model.AnunciosArquivados)
+
+        </a>
+
+    </li>
+
+</ul>
+
+
+
+@if (Model.Anuncios.Any())
+
+{
+
+    @foreach (var anuncio in Model.Anuncios)
+
+    {
+
+        <div class="card anuncio-card shadow-sm">
+
+            <div class="row g-0">
+
+
+
+                @{
+
+                    // Procura na lista 'Model.ImagensDosVeiculos'
+
+                    // pelas imagens que pertencem a este veículo
+
+                    var imagensDesteVeiculo = Model.ImagensDosVeiculos
+
+                    .Where(i => i.IdVeiculo == anuncio.IdVeiculo);
+
+
+
+                    // Tenta encontrar a capa
+
+                    var imagemCapa = imagensDesteVeiculo.FirstOrDefault(i => i.IsCapa == true);
+
+
+
+                    // Se não houver capa, pega na primeira imagem
+
+                    if (imagemCapa == null)
+
+                    {
+
+                        imagemCapa = imagensDesteVeiculo.FirstOrDefault();
+
+                    }
+
+
+
+                    // Define o URL (ou um placeholder)
+
+                    var imagemUrl = imagemCapa != null
+
+                    ? Url.Content(imagemCapa.CaminhoFicheiro)
+
+                    : Url.Content("~/images/placeholder-anuncio.png");
+
+                }
+
+
+
+                <div class="col-lg-3 col-md-4 anuncio-img-container">
+
+                    <img src="@imagemUrl" class="anuncio-img" alt="@anuncio.Titulo">
+
+                </div>
+
+
+
+                <div class="col-lg-9 col-md-8">
+
+                    <div class="card-body d-flex flex-wrap justify-content-between align-items-start h-100">
+
+                        <div class="anuncio-info">
+
+                            <h5 class="card-title">@anuncio.Titulo</h5>
+
+                            <p class="card-text text-muted mb-1">
+
+                                @anuncio.Veiculo.DataMatricula.Year • @anuncio.Veiculo.KmTotal km • @anuncio.Veiculo.Combustivel.Nome
+
+                            </p>
+
+                            <h4 class="card-price mb-2">@anuncio.Preco.ToString("C", new System.Globalization.CultureInfo("pt-PT"))</h4>
+
+                            <small class="text-muted">@anuncio.DataPublicacao.TempoDecorrido()</small>
+
+                            @if (anuncio.Estado == "Reservado")
+                            {
+
+
+
+                                <span class="badge bg-warning-soft text-warning-dark mt-2">
+
+                                    <i class="fas fa-clock me-1"></i> RESERVADO
+
+                                </span>
+
+                            }
+
+                        </div>
+
+                        <div class="anuncio-botoes mt-2 mt-md-0">
+
+
+
+                            @if (Model.StatusAtual == "Ativos")
+
+                            {
+
+                                <a asp-action="EditarAnuncio" asp-route-id="@anuncio.IdAnuncio" class="btn btn-sm btn-light">Editar</a>
+
+
+
+                                <form asp-action="PausarAnuncio" method="post" class="d-inline" onsubmit="return confirm('Tem a certeza que quer pausar este anúncio?');">
+
+                                    <input type="hidden" name="id" value="@anuncio.IdAnuncio" />
+
+                                    <button type="submit" class="btn btn-sm btn-outline-warning">Pausar</button>
+
+                                </form>
+
+
+
+                                <form asp-action="ArquivarAnuncio" method="post" class="d-inline" onsubmit="return confirm('REMOVER: Tem a certeza que quer remover este anúncio? Ele será movido para os Arquivados.');">
+
+                                    <input type="hidden" name="id" value="@anuncio.IdAnuncio" />
+
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Remover</button>
+
+                                </form>
+
+                            }
+
+                            else if (Model.StatusAtual == "Pausados")
+
+                            {
+
+                                <a asp-action="EditarAnuncio" asp-route-id="@anuncio.IdAnuncio" class="btn btn-sm btn-light">Editar</a>
+
+
+
+                                <form asp-action="AtivarAnuncio" method="post" class="d-inline">
+
+                                    <input type="hidden" name="id" value="@anuncio.IdAnuncio" />
+
+                                    <button type="submit" class="btn btn-sm btn-outline-success">Ativar</button>
+
+                                </form>
+
+
+
+                                <form asp-action="ArquivarAnuncio" method="post" class="d-inline" onsubmit="return confirm('REMOVER: Tem a certeza que quer remover (arquivar) este anúncio?');">
+
+                                    <input type="hidden" name="id" value="@anuncio.IdAnuncio" />
+
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Remover</button>
+
+                                </form>
+
+                            }
+
+                            else if (Model.StatusAtual == "Vendidos")
+
+                            {
+
+                                <form asp-action="ArquivarAnuncio" method="post" class="d-inline" onsubmit="return confirm('Tem a certeza que quer limpar este anúncio do seu histórico (será arquivado)?');">
+
+                                    <input type="hidden" name="id" value="@anuncio.IdAnuncio" />
+
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Limpar</button>
+
+                                </form>
+
+                            }
+
+                            else if (Model.StatusAtual == "Arquivados")
+
+                            {
+
+                            }
+
+
+
+                            <a asp-controller="Anuncios" asp-action="Detalhes" asp-route-id="@anuncio.IdAnuncio"
+                               class="btn btn-sm btn-dark" target="_blank">
+
+                                Ver Anúncio
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    }
+
+}
+
+else
+
+{
+
+    <div class="card anuncio-card shadow-sm">
+
+        <div class="card-body text-center">
+
+            <p class="text-muted mb-0">Não foram encontrados anúncios com o estado "@Model.StatusAtual".</p>
+
+        </div>
+
+    </div>
+
+}
+
+
+
+
+
+@*Lógica do pager*@
+
+
+
+<div class="mt-4">
+
+    @if (Model.TotalPages > 1)
+
+    {
+
+        <nav aria-label="Paginação dos anúncios">
+
+            <ul class="pagination justify-content-center">
+
+
+
+                <!-- Botão "Anterior"-->
+
+                <li class="page-item @Model.PageNumber == 1 ? " disabled" : "" )">
+
+                    <a class="page-link"
+                       asp-action="MeusAnuncios"
+                       asp-route-status="@Model.StatusAtual"
+                       asp-route-page="@(Model.PageNumber - 1)">Anterior</a>
+
+                </li>
+
+
+
+                <!-- Botões dos Números (Loop) -->
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+
+                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+
+                        <a class="page-link"
+                           asp-action="MeusAnuncios"
+                           asp-route-status="@Model.StatusAtual"
+                           asp-route-page="@i">@i</a>
+
+                    </li>
+
+                }
+
+
+
+                <!-- Botão "Próximo" -->
+
+                <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+
+                    <a class="page-link"
+                       asp-action="MeusAnuncios"
+                       asp-route-status="@Model.StatusAtual"
+                       asp-route-page="@(Model.PageNumber + 1)">Próximo</a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    }
+
+</div>

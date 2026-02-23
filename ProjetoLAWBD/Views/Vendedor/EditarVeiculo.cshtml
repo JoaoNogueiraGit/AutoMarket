@@ -1,0 +1,288 @@
+﻿@model ProjetoLAWBD.ViewModels.VendedorEditarVeiculoViewModel
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Editar Veículo";
+    Layout = "~/Views/Shared/_VendedorLayout.cshtml";
+
+    // 1. PREPARAR JSON DAS IMAGENS (SERVER-SIDE)
+    string jsonImagens = "[]";
+    if (Model.ImagensExistentes != null && Model.ImagensExistentes.Any()) {
+        var listaFormatada = Model.ImagensExistentes.Select(img => new {
+            source = img.CaminhoFicheiro,
+            options = new {
+                type = "local",
+                metadata = new { idDataBase = img.IdImagem.ToString() }
+            }
+        });
+        jsonImagens = JsonSerializer.Serialize(listaFormatada);
+    }
+
+    // Ler a flag do Controller
+    bool temAnuncio = ViewBag.TemAnuncioAtivo == true;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="h2 pt-4" style="font-weight:bold">@ViewData["Title"]</h2>
+        <p class="text-muted">Altere os detalhes ou atualize as fotos do veículo.</p>
+    </div>
+    <a asp-action="MeusVeiculos" class="btn btn-light">
+        <i class="fas fa-arrow-left me-1"></i> Voltar aos Meus Veículos
+    </a>
+</div>
+
+<div class="card anuncio-card shadow-sm">
+    <div class="card-body p-4 p-md-5">
+
+        <form asp-action="EditarVeiculo" method="post" enctype="multipart/form-data" id="formEditarVeiculo" data-tem-anuncio="@temAnuncio.ToString().ToLower()">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <input type="hidden" asp-for="Veiculo.IdVeiculo" />
+            <input type="hidden" asp-for="idsImagensParaRemover" id="idsImagensParaRemover" />
+
+            <h5>Detalhes do Veículo</h5>
+            <hr class="mt-2 mb-4">
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Marca</label>
+                    <select id="marca-dropdown" asp-items="@(new SelectList(Model.Marcas, "IdMarca", "Nome", Model.Veiculo.Modelo?.IdMarca))" class="form-select">
+                        <option value="">-- Selecione uma Marca --</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Veiculo.IdModelo" class="form-label">Modelo *</label>
+                    <select asp-for="Veiculo.IdModelo" id="modelo-dropdown" class="form-select">
+                        <option value="">-- Selecione --</option>
+                        @foreach (var modelo in Model.Modelos) {
+                            <option value="@modelo.IdModelo" data-marca-id="@modelo.IdMarca" selected="@(modelo.IdModelo == Model.Veiculo.IdModelo ? "selected" : null)">
+                                @modelo.Nome
+                            </option>
+                        }
+                    </select>
+                    <span asp-validation-for="Veiculo.IdModelo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label asp-for="Veiculo.PotenciaCV" class="form-label">Potência (cv) *</label>
+                    <input asp-for="Veiculo.PotenciaCV" class="form-control" type="tel" />
+                    <span asp-validation-for="Veiculo.PotenciaCV" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Veiculo.IdCaixa" class="form-label">Caixa *</label>
+                    <select asp-for="Veiculo.IdCaixa" asp-items="@(new SelectList(Model.Caixas, "IdCaixa", "Nome"))" class="form-select">
+                        <option value="">-- Selecione --</option>
+                    </select>
+                    <span asp-validation-for="Veiculo.IdCaixa" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Veiculo.IdCombustivel" class="form-label">Combustível *</label>
+                    <select asp-for="Veiculo.IdCombustivel" asp-items="@(new SelectList(Model.Combustiveis, "IdCombustivel", "Nome"))" class="form-select">
+                        <option value="">-- Selecione --</option>
+                    </select>
+                    <span asp-validation-for="Veiculo.IdCombustivel" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Veiculo.CilindradaCC" class="form-label">Cilindrada (cc)</label>
+                    <input asp-for="Veiculo.CilindradaCC" class="form-control" type="tel" />
+                    <span asp-validation-for="Veiculo.CilindradaCC" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label asp-for="Veiculo.NumLugares" class="form-label">Lugares *</label>
+                    <input asp-for="Veiculo.NumLugares" class="form-control" type="tel" />
+                    <span asp-validation-for="Veiculo.NumLugares" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Veiculo.NumPortas" class="form-label">Portas *</label>
+                    <input asp-for="Veiculo.NumPortas" class="form-control" type="tel" />
+                    <span asp-validation-for="Veiculo.NumPortas" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Veiculo.IdCategoria" class="form-label">Categoria *</label>
+                    <select asp-for="Veiculo.IdCategoria" asp-items="@(new SelectList(Model.Categorias, "IdCategoria", "Nome"))" class="form-select">
+                        <option value="">-- Selecione --</option>
+                    </select>
+                    <span asp-validation-for="Veiculo.IdCategoria" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label asp-for="Veiculo.DataMatricula" class="form-label">Ano da Matrícula *</label>
+                    <input asp-for="Veiculo.DataMatricula" class="form-control" type="date" />
+                    <span asp-validation-for="Veiculo.DataMatricula" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Veiculo.KmTotal" class="form-label">Quilometragem Total *</label>
+                    <input asp-for="Veiculo.KmTotal" class="form-control" type="tel" />
+                    <span asp-validation-for="Veiculo.KmTotal" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Veiculo.IdCor" class="form-label">Cor *</label>
+                    <select asp-for="Veiculo.IdCor" asp-items="@(new SelectList(Model.Cores, "IdCor", "Nome"))" class="form-select">
+                        <option value="">-- Selecione --</option>
+                    </select>
+                    <span asp-validation-for="Veiculo.IdCor" class="text-danger"></span>
+                </div>
+            </div>
+
+            <h5 class="mt-5">Imagens do Veículo</h5>
+            <p class="text-muted">Adicione novas ou remova as existentes. Arraste para reordenar.</p>
+            <hr class="mt-2 mb-4">
+
+            <div class="mb-3">
+                <input type="file"
+                       id="filepond_edit_input"
+                       name="FicheirosImagem"
+                       multiple />
+            </div>
+
+            <div class="text-end mt-5">
+                <a asp-action="MeusVeiculos" class="btn btn-light me-2">Cancelar</a>
+                <button type="submit" class="btn btn-dark">Guardar Alterações</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- LÓGICA DE DROP DOWNS (Igual) ---
+            const marcaDropdown = document.getElementById('marca-dropdown');
+            const modeloDropdown = document.getElementById('modelo-dropdown');
+            const todosOsModelos = Array.from(modeloDropdown.options);
+
+            function atualizarModelos() {
+                const selectedMarcaId = marcaDropdown.value;
+                const currentModeloId = modeloDropdown.value;
+
+                modeloDropdown.innerHTML = '';
+                if (todosOsModelos.length > 0) {
+                    modeloDropdown.appendChild(todosOsModelos[0].cloneNode(true));
+                }
+
+                if (!selectedMarcaId) {
+                    modeloDropdown.disabled = true;
+                    return;
+                }
+
+                const modelosFiltrados = todosOsModelos.filter(function(option) {
+                    return option.dataset.marcaId === selectedMarcaId;
+                });
+
+                modelosFiltrados.forEach(function(modeloOption) {
+                    modeloDropdown.appendChild(modeloOption.cloneNode(true));
+                });
+
+                modeloDropdown.disabled = false;
+                if (currentModeloId) {
+                    modeloDropdown.value = currentModeloId;
+                }
+            }
+
+            marcaDropdown.addEventListener('change', atualizarModelos);
+            atualizarModelos();
+
+
+            // --- NOVA LÓGICA DE CONFIRMAÇÃO (POPUP) ---
+            // Isto impede o reload da página se o user cancelar
+            const form = document.getElementById('formEditarVeiculo');
+
+            form.addEventListener('submit', function(e) {
+                const temAnuncio = form.getAttribute('data-tem-anuncio') === 'true';
+
+                if (temAnuncio) {
+                    const confirmacao = confirm("ATENÇÃO: Este veículo tem um anúncio ativo.\n\nSe guardar, o anúncio será atualizado automaticamente com estas novas fotos e dados.\n\nDeseja continuar?");
+
+                    if (!confirmacao) {
+                        e.preventDefault(); // Impede o envio e o reload
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const inputElement = document.getElementById('filepond_edit_input');
+            if (!inputElement) return;
+
+            // Destruir instância existente (se houver)
+            if (typeof FilePond !== 'undefined') {
+                const existingInstance = FilePond.find(inputElement);
+                if (existingInstance) {
+                    existingInstance.destroy();
+                }
+            }
+
+            if (typeof FilePond === 'undefined') {
+                console.error("FilePond JS não encontrado.");
+                return;
+            }
+
+            FilePond.registerPlugin(FilePondPluginFileEncode, FilePondPluginImagePreview);
+
+            // Ler JSON das imagens existentes
+            let existingFiles = [];
+            try {
+                const rawData = '@Html.Raw(jsonImagens)';
+                if (rawData && rawData !== '[]') {
+                    existingFiles = JSON.parse(rawData);
+                }
+            } catch (e) {
+                console.error('Erro ao parsear imagens:', e);
+            }
+
+            // Criar FilePond
+            FilePond.create(inputElement, {
+                labelIdle: 'Arraste fotos para aqui ou <span class="filepond--label-action"> clique para escolher </span>',
+                labelInvalidField: 'O campo contém ficheiros inválidos',
+                labelButtonRemoveItem: 'Remover',
+                labelLoading: 'A carregar',
+                labelTapToCancel: 'clique para cancelar',
+                labelTapToRetry: 'clique para tentar novamente',
+                labelTapToUndo: 'clique para anular',
+
+                allowReorder: true,
+                maxFiles: 10,
+                credits: false,
+
+                files: existingFiles,
+
+                server: {
+                    load: (source, load, error, progress, abort, headers) => {
+                        fetch(source)
+                            .then(res => res.blob())
+                            .then(load)
+                            .catch(error);
+                    }
+                },
+
+                onremovefile: (error, fileItem) => {
+                    if (error) return;
+                    const meta = fileItem.getMetadata();
+                    if (meta && meta.idDataBase) {
+                        let hidden = document.getElementById('idsImagensParaRemover');
+                        let vals = hidden.value ? hidden.value.split(',') : [];
+                        if (!vals.includes(meta.idDataBase)) {
+                            vals.push(meta.idDataBase);
+                            hidden.value = vals.join(',');
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

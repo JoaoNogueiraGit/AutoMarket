@@ -1,0 +1,147 @@
+﻿@page
+@using System.Reflection
+@using System.ComponentModel.DataAnnotations
+@using static ProjetoLAWBD.Areas.Identity.Pages.Account.RegisterBuyerModel
+@model RegisterBuyerModel
+@inject IConfiguration Configuration
+@{
+    ViewData["Title"] = "Register";
+}
+
+@if (Model.IsLoggedInUser)
+{
+    <div class="text-center" style="margin: 5rem auto; max-width: 600px;">
+        <h2>Já tem sessão iniciada</h2>
+
+        <p class="lead" style="margin-top: 1rem;">
+            Vimos que já está logado como <strong>@User.Identity.Name</strong>.
+        </p>
+        <p>
+            No AutoMarket, as contas de Vendedor e Comprador são separadas
+            e <strong>requerem emails diferentes</strong>.
+        </p>
+        <p>
+            Para criar uma nova conta de Comprador, deve primeiro
+            terminar a sessão da sua conta atual.
+        </p>
+
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
+              asp-route-returnUrl="@Url.Page(null, new { area = "Identity", page = "/Registos/RegisterBuyer" })"
+              method="post">
+
+            <button type="submit" class="btn btn-primary btn-lg button-submit" style="margin-top: 1rem;">
+                Terminar Sessão e Registar como Comprador
+            </button>
+        </form>
+    </div>
+}
+else
+{
+    <div class="registration-container">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+
+            <h2>Bem-vindo</h2>
+            <p>Junte-se a nós e adquira já o seu veículo de sonho</p>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" placeholder="teu@email.com" />
+                <label asp-for="Input.Email">Email</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="********" />
+                <label asp-for="Input.Password">Palavra-passe</label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="********" />
+                <label asp-for="Input.ConfirmPassword">Confirmar Palavra-passe</label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="teunome123" />
+                <label asp-for="Input.UserName">Nome de Utilizador</label>
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3 d-flex justify-content-center">
+                <div class="g-recaptcha" data-sitekey="@Configuration["reCAPTCHA:SiteKey"]"></div>
+            </div>
+
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mb-3 button-submit">Criar</button>
+
+        </form>
+
+        <section>
+            <div class="separator">ou continue com</div>
+
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            Não existem serviços de autenticação externos configurados.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                        <div class="external-login-buttons">
+                            @foreach (var provider in Model.ExternalLogins!)
+                            {
+                                <button type="submit" class="btn btn-external @provider.Name.ToLower()"
+                                        name="provider" value="@provider.Name"
+                                        title="Entrar com a sua conta @provider.DisplayName">
+
+                                    @if (provider.Name == "Google")
+                                    {
+                                        <img src="~/icons/google-icon.svg" alt="Google"
+                                             width="18" height="18"
+                                             class="me-2" style="vertical-align: text-bottom;" />
+                                    }
+                                    else if (provider.Name == "Twitter")
+                                    {
+                                        <img src="~/icons/x-icon.svg" alt="X"
+                                             width="18" height="18"
+                                             class="me-2" style="vertical-align: text-bottom;" />
+                                    }
+
+
+                                    @provider.DisplayName
+                                </button>
+                            }
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+
+        <div class="login-links">
+            <p>
+                Criar conta como vendedor?
+                <a asp-page="./RegisterSeller">Criar conta</a>
+            </p>
+            <p>
+                Já tem uma conta?
+                <a asp-page="/Account/Login">Entre na sua conta</a>
+            </p>
+        </div>
+
+    </div>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth-layout.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+}

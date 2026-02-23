@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ProjetoLAWBD.Models
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    // Verifica se o utilizador está logado
+    if (SignInManager.IsSignedIn(User)) {
+        // Verifica o Role e escolhe o Layout da Dashboard correto
+        if (User.IsInRole("Administrador")) {
+            Layout = "/Views/Shared/_AdminLayout.cshtml";
+        }
+        else if (User.IsInRole("Vendedor")) {
+            Layout = "/Views/Shared/_VendedorLayout.cshtml";
+        }
+        else if (User.IsInRole("Comprador")) {
+            Layout = "/Views/Shared/_CompradorLayout.cshtml";
+        }
+        else {
+            // Fallback para outros utilizadores (ex: Comprador)
+            Layout = "/Views/Shared/_Layout.cshtml";
+        }
+    }
+}
+
+
+@RenderBody()
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}
+
+@section Styles {
+    @await RenderSectionAsync("Styles", required: false)
+}

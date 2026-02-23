@@ -1,0 +1,758 @@
+﻿@using ProjetoLAWBD.Extensions
+@model ProjetoLAWBD.ViewModels.AnunciosIndexViewModel
+
+@{
+    ViewData["Title"] = "Pesquisa de Veículos";
+}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<div class="container py-4">
+
+    <nav aria-label="breadcrumb" class="mb-2">
+        <ol class="breadcrumb" style="background: none; padding-left: 0;">
+            <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" class="text-decoration-none">Início</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Anúncios</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold mb-0">Carros à venda</h1>
+            <p class="text-muted small mb-0">
+                @Model.TotalAnuncios viaturas encontradas
+                @if (Model.IdFiltroAtivo.HasValue) {
+                    <span class="badge bg-primary ms-2">Filtro: @Model.NomeFiltroAtivo</span>
+                }
+            </p>
+        </div>
+        <button class="btn btn-outline-dark d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#filtrosOffcanvas">
+            <i class="fas fa-filter me-2"></i>Filtros
+        </button>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="filtrosOffcanvas">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title fw-bold">Filtrar Resultados</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                </div>
+                <div class="offcanvas-body p-0">
+                    <div class="card border-0 shadow-sm bg-light">
+                        <div class="card-body p-4">
+
+                            <form asp-action="Index" method="get" id="formFiltros">
+
+                                <input type="hidden" name="ordenacao" value="@Model.Ordenacao" />
+                                <input type="hidden" name="idFiltroAtivo" value="@Model.IdFiltroAtivo" />
+                                <input type="hidden" name="nomeFiltroAtivo" value="@Model.NomeFiltroAtivo" />
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">Pesquisa Livre</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                                        <input type="text" class="form-control border-start-0" name="termo" value="@Model.Termo" placeholder="Ex: Teto panorâmico...">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">Localização</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-map-marker-alt text-danger"></i></span>
+                                        <input type="text"
+                                               class="form-control border-start-0 ps-0"
+                                               id="mainLocationDisplay"
+                                               /* Mostra Local + Raio se existir * /
+                                               value="@(string.IsNullOrEmpty(Model.Localizacao) ? "" : Model.Localizacao + (Model.Raio > 0 ? " + " + Model.Raio + " km" : ""))"
+                                               placeholder="Portugal (Todo o País)"
+                                               readonly
+                                               style="cursor: pointer; background-color: white;"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#locationModal">
+                                    </div>
+
+                                    <input type="hidden" name="Localizacao" id="hiddenLocationName" value="@Model.Localizacao">
+                                    <input type="hidden" name="Latitude" id="hiddenLat" value="@Model.Latitude">
+                                    <input type="hidden" name="Longitude" id="hiddenLng" value="@Model.Longitude">
+                                    <input type="hidden" name="Raio" id="hiddenRadius" value="@Model.Raio">
+                                </div>
+
+                                <hr class="my-3 text-muted opacity-25">
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">Marca</label>
+                                    <select class="form-select" name="marcaId" id="marca-dropdown" asp-items="@(new SelectList(Model.Marcas, "IdMarca", "Nome", Model.MarcaId))">
+                                        <option value="">Todas as Marcas</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">Modelo</label>
+                                    <select class="form-select" name="modeloId" id="modelo-dropdown" disabled>
+                                        <option value="">Todos os Modelos</option>
+                                        @foreach (var modelo in Model.Modelos ?? new List<Modelo>()) {
+                                            <option value="@modelo.IdModelo" data-marca="@modelo.IdMarca" selected="@(Model.ModeloId == modelo.IdModelo)">@modelo.Nome</option>
+                                        }
+                                    </select>
+                                    <small id="modelo-msg" class="text-muted" style="font-size: 0.7rem; display:none;">Selecione uma marca primeiro</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">Categoria</label>
+                                    <select class="form-select" name="categoriaId" asp-items="@(new SelectList(Model.Categorias, "IdCategoria", "Nome", Model.CategoriaId))">
+                                        <option value="">Todas</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">Combustível</label>
+                                    <select class="form-select" name="combustivelId" asp-items="@(new SelectList(Model.Combustiveis, "IdCombustivel", "Nome", Model.CombustivelId))">
+                                        <option value="">Todos</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">Caixa</label>
+                                    <select class="form-select" name="caixaId" asp-items="@(new SelectList(Model.Caixas, "IdCaixa", "Nome", Model.CaixaId))">
+                                        <option value="">Todas</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">Cor</label>
+                                    <select class="form-select" name="corId" asp-items="@(new SelectList(Model.Cores, "IdCor", "Nome", Model.CorId))">
+                                        <option value="">Todas</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">Preço (€)</label>
+                                    <div class="range-slider-container position-relative mb-4" style="height: 20px;">
+                                        <div class="slider-track-bg"></div>
+                                        <div class="slider-track-fill" id="trackFill"></div>
+                                        <input type="range" class="double-range" min="0" max="@((int)Model.PrecoMaxDb)" value="@((int)(Model.PrecoMin ?? 0))" id="sliderMin">
+                                        <input type="range" class="double-range" min="0" max="@((int)Model.PrecoMaxDb)" value="@( (Model.PrecoMax.HasValue && Model.PrecoMax > 0) ? (int)Model.PrecoMax : (int)Model.PrecoMaxDb )" id="sliderMax">
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <input type="number" class="form-control form-control-sm" name="precoMin" id="inputPrecoMin" value="@Model.PrecoMin" placeholder="Mín" min="0">
+                                        <input type="number" class="form-control form-control-sm" name="precoMax" id="inputPrecoMax" value="@Model.PrecoMax" placeholder="Máx" min="0">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">Quilómetros (Até)</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="kmsAte" value="@Model.KmsAte" placeholder="Ex: 150000" min="0">
+                                        <span class="input-group-text bg-white text-muted">km</span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">Ano</label>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <select class="form-select" name="anoDesde" id="ano-desde">
+                                            <option value="">De</option>
+                                            @for (int i = DateTime.Now.Year; i >= 1990; i--) {
+                                                <option value="@i" selected="@(Model.AnoDe == i)">@i</option>
+                                            }
+                                        </select>
+                                        <span>-</span>
+                                        <select class="form-select" name="anoAte" id="ano-ate">
+                                            <option value="">Até</option>
+                                            @for (int i = DateTime.Now.Year; i >= 1990; i--) {
+                                                <option value="@i" selected="@(Model.AnoAte == i)">@i</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2 mt-4">
+                                    <button type="submit" class="btn btn-dark fw-bold">Aplicar Filtros</button>
+                                    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Limpar Filtros</a>
+                                </div>
+
+                                @if (User.Identity.IsAuthenticated) {
+                                    <hr class="my-4 text-muted opacity-25">
+                                    <button type="button" class="btn btn-outline-danger w-100 shadow-sm fw-bold" data-bs-toggle="modal" data-bs-target="#modalGuardarFiltro">
+                                        <i class="far fa-heart me-2"></i>
+                                        @(Model.IdFiltroAtivo.HasValue ? "Gerir Filtro" : "Guardar Pesquisa")
+                                    </button>
+                                }
+                                else {
+                                    <div class="mt-4 p-3 bg-white rounded border text-center">
+                                        <small class="text-muted d-block mb-2">Quer guardar esta pesquisa?</small>
+                                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-sm btn-outline-primary w-100">Login</a>
+                                    </div>
+                                }
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+
+            <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded shadow-sm border">
+                <span class="text-muted small">Mostrando <strong>@Model.Anuncios.Count</strong> resultados</span>
+                <div class="d-flex align-items-center">
+                    <label class="small text-muted me-2 d-none d-sm-block">Ordenar:</label>
+                    <select class="form-select form-select-sm w-auto border-0 bg-light fw-bold"
+                            name="ordenacao"
+                            onchange="document.querySelector('input[name=ordenacao]').value=this.value; document.getElementById('formFiltros').submit();">
+                        <option value="recente" selected="@(Model.Ordenacao == "recente")">Mais Recentes</option>
+                        <option value="preco_asc" selected="@(Model.Ordenacao == "preco_asc")">Preço (Baixo -> Alto)</option>
+                        <option value="preco_desc" selected="@(Model.Ordenacao == "preco_desc")">Preço (Alto -> Baixo)</option>
+                        <option value="km_asc" selected="@(Model.Ordenacao == "km_asc")">Km (Menos)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                @foreach (var anuncio in Model.Anuncios) {
+                    // Lógica de Imagem
+                    var imagensDoCarro = Model.ImagensDosVeiculos.Where(i => i.IdVeiculo == anuncio.IdVeiculo).ToList();
+                    var imgCapa = imagensDoCarro.FirstOrDefault(i => i.IsCapa) ?? imagensDoCarro.FirstOrDefault();
+                    var imgUrl = imgCapa != null ? Url.Content(imgCapa.CaminhoFicheiro) : Url.Content("~/images/placeholder-anuncio.png");
+
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card h-100 shadow-sm border-0 anuncio-card-hover">
+                            <div class="position-relative">
+                                <a asp-action="Detalhes" asp-route-id="@anuncio.IdAnuncio">
+                                    <img src="@imgUrl" class="card-img-top" alt="@anuncio.Titulo" style="height: 200px; object-fit: cover;">
+                                </a>
+                                @if ((DateTime.UtcNow - anuncio.DataPublicacao).TotalDays < 3) {
+                                    <span class="badge bg-dark position-absolute top-0 start-0 m-2 shadow-sm">Novo</span>
+                                }
+                            </div>
+                            <div class="card-body">
+                                <a asp-action="Detalhes" asp-route-id="@anuncio.IdAnuncio" class="text-decoration-none text-dark">
+                                    <h5 class="card-title h6 fw-bold text-truncate mb-1">@anuncio.Titulo</h5>
+                                </a>
+                                <p class="small text-muted mb-2">@anuncio.Veiculo.Modelo.Marca.Nome @anuncio.Veiculo.Modelo.Nome</p>
+                                <h4 class="fw-bold mb-3">@anuncio.Preco.ToString("C0")</h4>
+
+                                <div class="row g-2 small text-muted mb-3">
+                                    <div class="col-6"><i class="fas fa-calendar-alt me-1 w-15"></i> @anuncio.Veiculo.DataMatricula.Year</div>
+                                    <div class="col-6"><i class="fas fa-road me-1 w-15"></i> @anuncio.Veiculo.KmTotal.ToString("N0") km</div>
+                                    <div class="col-6"><i class="fas fa-gas-pump me-1 w-15"></i> @anuncio.Veiculo.Combustivel.Nome</div>
+                                    <div class="col-6"><i class="fas fa-cog me-1 w-15"></i> @(anuncio.Veiculo.Caixa?.Nome ?? "N/A")</div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-white border-top-0 pt-0 pb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted text-truncate" style="max-width: 120px;">
+                                        <i class="fas fa-map-marker-alt text-danger me-1"></i>@anuncio.LocalizacaoCidade
+                                    </small>
+                                    <small class="text-muted" style="font-size: 0.75rem;">
+                                        <i class="far fa-clock me-1"></i>@anuncio.DataPublicacao.ToString("dd/MM/yyyy")
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (!Model.Anuncios.Any()) {
+                    <div class="col-12 text-center py-5">
+                        <div class="mb-3"><i class="fas fa-search fa-3x text-muted opacity-50"></i></div>
+                        <h4 class="fw-bold">Nenhum veículo encontrado</h4>
+                        <p class="text-muted">Tente ajustar os seus filtros.</p>
+                        <a asp-action="Index" class="btn btn-dark mt-2">Limpar todos os filtros</a>
+                    </div>
+                }
+            </div>
+
+            @if (Model.TotalPaginas > 1) {
+                <div class="mt-5 d-flex justify-content-center">
+                    <nav aria-label="Navegação de página">
+                        <ul class="pagination">
+                            <li class="page-item @(Model.TemPaginaAnterior ? "" : "disabled")"><a class="page-link" href="#">&laquo;</a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item @(Model.TemProximaPagina ? "" : "disabled")"><a class="page-link" href="#">&raquo;</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalGuardarFiltro" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form asp-action="GuardarFiltro" method="post" id="formGuardar">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">
+                        @(Model.IdFiltroAtivo.HasValue ? "Gerir Filtro" : "Guardar Pesquisa")
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body pt-2">
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="nomeFiltro" name="nomeFiltro"
+                               placeholder="Nome" required autocomplete="off"
+                               value="@(Model.IdFiltroAtivo.HasValue? Model.NomeFiltroAtivo: "")">
+                        <label for="nomeFiltro">Nome do Filtro</label>
+                    </div>
+
+                    <input type="hidden" name="Termo" id="saveTermo" />
+                    <input type="hidden" name="Localizacao" id="saveLocalizacao" />
+                    <input type="hidden" name="Latitude" id="saveLatitude" />
+                    <input type="hidden" name="Longitude" id="saveLongitude" />
+                    <input type="hidden" name="Raio" id="saveRaio" />
+                    <input type="hidden" name="MarcaId" id="saveMarcaId" />
+                    <input type="hidden" name="ModeloId" id="saveModeloId" />
+                    <input type="hidden" name="CategoriaId" id="saveCategoriaId" />
+                    <input type="hidden" name="CombustivelId" id="saveCombustivelId" />
+                    <input type="hidden" name="CaixaId" id="saveCaixaId" />
+                    <input type="hidden" name="CorId" id="saveCorId" />
+                    <input type="hidden" name="PrecoMin" id="savePrecoMin" />
+                    <input type="hidden" name="PrecoMax" id="savePrecoMax" />
+                    <input type="hidden" name="KmsAte" id="saveKmsAte" />
+                    <input type="hidden" name="AnoDe" id="saveAnoDe" />
+                    <input type="hidden" name="AnoAte" id="saveAnoAte" />
+
+                    <input type="hidden" name="idFiltroParaAtualizar" value="@Model.IdFiltroAtivo" />
+                </div>
+
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+
+                    @if (Model.IdFiltroAtivo.HasValue) {
+                        <div class="d-flex gap-2 w-100 justify-content-end">
+                            <button type="submit" name="acao" value="novo" class="btn btn-secondary">Guardar Novo</button>
+                            <button type="submit" name="acao" value="atualizar" class="btn btn-dark">Atualizar Existente</button>
+                        </div>
+                    }
+                    else {
+                        <button type="submit" name="acao" value="novo" class="btn btn-danger px-4">Guardar</button>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="locationModalLabel">Selecionar Localização</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-8">
+                        <label class="form-label small text-muted">Pesquisar Distrito</label>
+                        <div class="position-relative">
+                            <input type="text" id="locationSearchInput" class="form-control" placeholder="Ex: Lisboa, Faro, Porto..." autocomplete="off">
+                            <div id="searchResults" class="list-group position-absolute w-100 shadow" style="display:none; max-height: 200px; overflow-y: auto; z-index: 1000; top: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small text-muted">Raio (km)</label>
+                        <select id="modalRadiusSelect" class="form-select">
+                            <option value="5">5 km</option>
+                            <option value="10">10 km</option>
+                            <option value="30">30 km</option>
+                            <option value="50">50 km</option>
+                            <option value="100">100 km</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="mapContainer" style="height: 400px; width: 100%; border-radius: 8px; background: #aad3df;"></div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-dark px-4" id="btnConfirmLocation">Confirmar Seleção</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // ===============================================
+            // 1. LÓGICA DO MAPA & LOCALIZAÇÃO (IMPORTADA DA HOME)
+            // ===============================================
+            let map, marker, circle;
+            let todosLocais = [];
+            const portugalOption = { name: "Portugal (Todo o País)", lat: 39.55, lng: -7.85, type: "pais" };
+
+            // Elementos
+            const modalElement = document.getElementById('locationModal');
+            const searchInput = document.getElementById('locationSearchInput');
+            const resultsList = document.getElementById('searchResults');
+            const radiusSelect = document.getElementById('modalRadiusSelect');
+            const btnConfirm = document.getElementById('btnConfirmLocation');
+
+            // 1.1 CARREGAR JSON
+            fetch('/dados/locais.json')
+                .then(r => r.json())
+                .then(data => todosLocais = data)
+                .catch(e => console.error('Erro JSON (verificar se o ficheiro existe em wwwroot/dados):', e));
+
+            // 1.2 INICIALIZAR MAPA AO ABRIR MODAL
+            if (modalElement) {
+                modalElement.addEventListener('shown.bs.modal', function () {
+                    if (!map) {
+                        const bounds = L.latLngBounds([36.5, -10.0], [42.5, -5.0]);
+                        map = L.map('mapContainer', {
+                            center: [39.55, -7.85],
+                            zoom: 7,
+                            minZoom: 6,
+                            maxBounds: bounds,
+                            zoomControl: false
+                        });
+                        L.control.zoom({ position: 'bottomright' }).addTo(map);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; OpenStreetMap contributors'
+                        }).addTo(map);
+                    }
+                    setTimeout(function() { map.invalidateSize(); }, 100);
+                });
+            }
+
+            // 1.3 PESQUISA DENTRO DO MODAL
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.toLowerCase();
+                    resultsList.innerHTML = '';
+                    if (query.length === 0) radiusSelect.disabled = false;
+                    if (query.length < 2 || todosLocais.length === 0) {
+                        resultsList.style.display = 'none';
+                        return;
+                    }
+
+                    let matches = todosLocais.filter(d => d.name.toLowerCase().includes(query)).slice(0, 10);
+                    if ("portugal".includes(query) || "todo".includes(query) || "pais".includes(query)) {
+                        matches.unshift(portugalOption);
+                    }
+
+                    if (matches.length > 0) {
+                        resultsList.style.display = 'block';
+                        matches.forEach(d => {
+                            const item = document.createElement('a');
+                            item.className = 'list-group-item list-group-item-action d-flex align-items-center justify-content-between';
+                            item.href = '#';
+                            let icon = d.type === 'pais' ? '<i class="fas fa-globe-europe text-success me-2"></i>' : '<i class="fas fa-map-marker-alt text-danger me-2"></i>';
+                            item.innerHTML = `<div>${icon} <span class="fw-bold">${d.name}</span></div>`;
+                            item.addEventListener('click', (e) => { e.preventDefault(); selectLocation(d); });
+                            resultsList.appendChild(item);
+                        });
+                    } else { resultsList.style.display = 'none'; }
+                });
+            }
+
+            let selectedLocationData = null;
+
+            function selectLocation(local) {
+                searchInput.value = local.name;
+                resultsList.style.display = 'none';
+                selectedLocationData = local;
+
+                if (local.type === 'pais') {
+                    if (marker) map.removeLayer(marker);
+                    if (circle) map.removeLayer(circle);
+                    marker = null; circle = null;
+                    map.setView([39.55, -7.85], 7);
+                    radiusSelect.value = "0"; radiusSelect.disabled = true;
+                    return;
+                }
+
+                radiusSelect.disabled = false;
+                if (marker) map.removeLayer(marker);
+                marker = L.marker([local.lat, local.lng]).addTo(map);
+                updateCircle(local.lat, local.lng);
+                map.setView([local.lat, local.lng], 9);
+            }
+
+            function updateCircle(lat, lng) {
+                if (circle) map.removeLayer(circle);
+                if (!marker) return;
+                const r = parseInt(radiusSelect.value);
+                if (r > 0) {
+                    circle = L.circle([lat, lng], { color: '#0d6efd', fillColor: '#0d6efd', fillOpacity: 0.2, radius: r * 1000 }).addTo(map);
+                    map.fitBounds(circle.getBounds());
+                }
+            }
+
+            if (radiusSelect) {
+                radiusSelect.addEventListener('change', function() {
+                    if(marker) { const ll = marker.getLatLng(); updateCircle(ll.lat, ll.lng); }
+                });
+            }
+
+            // 1.4 BOTÃO CONFIRMAR (CRÍTICO: ATUALIZA OS HIDDENS NA SIDEBAR)
+            if (btnConfirm) {
+                btnConfirm.addEventListener('click', function() {
+                    if (!selectedLocationData) selectedLocationData = { name: "", lat: null, lng: null };
+                    const r = radiusSelect.disabled ? 0 : parseInt(radiusSelect.value);
+
+                    // Atualizar Display Visual
+                    let displayText = selectedLocationData.name || "Portugal (Todo o País)";
+                    if (r > 0 && selectedLocationData.name) displayText += ` + ${r} km`;
+                    document.getElementById('mainLocationDisplay').value = displayText;
+
+                    // Atualizar Inputs Ocultos (Estado)
+                    document.getElementById('hiddenLocationName').value = selectedLocationData.name;
+                    document.getElementById('hiddenRadius').value = r;
+                    if (selectedLocationData.lat && selectedLocationData.lng) {
+                        document.getElementById('hiddenLat').value = selectedLocationData.lat;
+                        document.getElementById('hiddenLng').value = selectedLocationData.lng;
+                    } else {
+                        document.getElementById('hiddenLat').value = "";
+                        document.getElementById('hiddenLng').value = "";
+                    }
+
+                    bootstrap.Modal.getInstance(modalElement).hide();
+                });
+            }
+
+            // Fechar ao clicar fora
+            document.addEventListener('click', (e) => {
+                if (searchInput && resultsList) {
+                    if (!searchInput.contains(e.target) && !resultsList.contains(e.target)) {
+                        resultsList.style.display = 'none';
+                    }
+                }
+            });
+
+            // ===============================================
+            // 2. TRANSFERIR DADOS PARA MODAL DE GUARDAR
+            // ===============================================
+            const modalGuardar = document.getElementById('modalGuardarFiltro');
+            if (modalGuardar) {
+                modalGuardar.addEventListener('show.bs.modal', function () {
+                    // Texto e Geo
+                    document.getElementById('saveTermo').value = document.querySelector('input[name="termo"]')?.value || "";
+                    document.getElementById('saveLocalizacao').value = document.getElementById('hiddenLocationName')?.value || "";
+                    document.getElementById('saveLatitude').value = document.getElementById('hiddenLat')?.value || "";
+                    document.getElementById('saveLongitude').value = document.getElementById('hiddenLng')?.value || "";
+                    document.getElementById('saveRaio').value = document.getElementById('hiddenRadius')?.value || "";
+
+                    // Dropdowns
+                    document.getElementById('saveMarcaId').value = document.getElementById('marca-dropdown')?.value || "";
+                    document.getElementById('saveModeloId').value = document.getElementById('modelo-dropdown')?.value || "";
+                    document.getElementById('saveCategoriaId').value = document.querySelector('select[name="categoriaId"]')?.value || "";
+                    document.getElementById('saveCombustivelId').value = document.querySelector('select[name="combustivelId"]')?.value || "";
+                    document.getElementById('saveCaixaId').value = document.querySelector('select[name="caixaId"]')?.value || "";
+                    document.getElementById('saveCorId').value = document.querySelector('select[name="corId"]')?.value || "";
+
+                    // Numéricos
+                    document.getElementById('savePrecoMin').value = document.getElementById('inputPrecoMin')?.value || "";
+                    document.getElementById('savePrecoMax').value = document.getElementById('inputPrecoMax')?.value || "";
+                    document.getElementById('saveKmsAte').value = document.querySelector('input[name="kmsAte"]')?.value || "";
+                    document.getElementById('saveAnoDe').value = document.getElementById('ano-desde')?.value || "";
+                    document.getElementById('saveAnoAte').value = document.getElementById('ano-ate')?.value || "";
+                });
+            }
+
+            // ===============================================
+            // 3. MODELOS DINÂMICOS
+            // ===============================================
+            const marcaDropdown = document.getElementById('marca-dropdown');
+            const modeloDropdown = document.getElementById('modelo-dropdown');
+            const modeloMsg = document.getElementById('modelo-msg');
+
+            if(marcaDropdown && modeloDropdown) {
+                const todosOsModelos = Array.from(modeloDropdown.options);
+
+                function atualizarModelos() {
+                    const selectedMarcaId = marcaDropdown.value;
+                    modeloDropdown.innerHTML = '';
+                    modeloDropdown.appendChild(todosOsModelos[0]);
+
+                    if (!selectedMarcaId) {
+                        modeloDropdown.disabled = true;
+                        modeloDropdown.value = "";
+                        if(modeloMsg) modeloMsg.style.display = 'block';
+                        return;
+                    }
+
+                    const modelosFiltrados = todosOsModelos.filter(function(option) {
+                        if (option.value === "") return false;
+                        return option.getAttribute('data-marca') === selectedMarcaId;
+                    });
+
+                    modelosFiltrados.forEach(function(modeloOption) {
+                        modeloDropdown.appendChild(modeloOption.cloneNode(true));
+                    });
+
+                    modeloDropdown.disabled = false;
+                    if(modeloMsg) modeloMsg.style.display = 'none';
+                }
+
+                marcaDropdown.addEventListener('change', atualizarModelos);
+                atualizarModelos();
+
+                const modeloSelecionadoServidor = "@Model.ModeloId";
+                if(modeloSelecionadoServidor && marcaDropdown.value) {
+                    modeloDropdown.value = modeloSelecionadoServidor;
+                }
+            }
+
+            // ===============================================
+            // 4. VALIDAÇÃO ANOS
+            // ===============================================
+            const anoDesdeSelect = document.getElementById('ano-desde');
+            const anoAteSelect = document.getElementById('ano-ate');
+            if (anoDesdeSelect && anoAteSelect) {
+                function atualizarAnoAte() {
+                    const anoInicio = parseInt(anoDesdeSelect.value);
+                    if (!anoInicio) {
+                        Array.from(anoAteSelect.options).forEach(opt => opt.disabled = false);
+                        return;
+                    }
+                    Array.from(anoAteSelect.options).forEach(opt => {
+                        const anoOpcao = parseInt(opt.value);
+                        if (!opt.value) return;
+                        if (anoOpcao < anoInicio) {
+                            opt.disabled = true;
+                            if (anoAteSelect.value == anoOpcao) anoAteSelect.value = "";
+                        } else { opt.disabled = false; }
+                    });
+                }
+                anoDesdeSelect.addEventListener('change', atualizarAnoAte);
+                atualizarAnoAte();
+            }
+
+            // ===============================================
+            // 5. SLIDER PREÇO (Corrigido)
+            // ===============================================
+            const sliderMin = document.getElementById('sliderMin');
+            const sliderMax = document.getElementById('sliderMax');
+            const inputMin = document.getElementById('inputPrecoMin');
+            const inputMax = document.getElementById('inputPrecoMax');
+            const trackFill = document.getElementById('trackFill');
+            const minGap = 1000;
+
+            if (sliderMin && sliderMax && trackFill) {
+                const max = parseInt(sliderMin.max) > 0 ? parseInt(sliderMin.max) : 1;
+
+                function updateSliderVisuals() {
+                    let val1 = parseInt(sliderMin.value);
+                    let val2 = parseInt(sliderMax.value);
+
+                    if (val2 - val1 < minGap) {
+                        if (parseInt(inputMin.value) !== val1) { sliderMin.value = val2 - minGap; val1 = val2 - minGap; }
+                        else { sliderMax.value = val1 + minGap; val2 = val1 + minGap; }
+                    }
+                    inputMin.value = val1;
+                    inputMax.value = val2;
+                    const percent1 = (val1 / max) * 100;
+                    const percent2 = (val2 / max) * 100;
+                    trackFill.style.left = percent1 + "%";
+                    trackFill.style.width = (percent2 - percent1) + "%";
+                }
+
+                function syncInputsToSlider() {
+                    let val1 = parseInt(inputMin.value) || 0;
+                    let val2 = parseInt(inputMax.value) || max;
+                    if (val1 < 0) val1 = 0;
+                    if (val2 > max) val2 = max;
+                    if (val1 >= val2 - minGap) { val1 = val2 - minGap; inputMin.value = val1; }
+                    sliderMin.value = val1;
+                    sliderMax.value = val2;
+                    updateSliderVisuals();
+                }
+
+                sliderMin.addEventListener('input', updateSliderVisuals);
+                sliderMax.addEventListener('input', updateSliderVisuals);
+                inputMin.addEventListener('change', syncInputsToSlider);
+                inputMax.addEventListener('change', syncInputsToSlider);
+                updateSliderVisuals();
+            }
+        });
+    </script>
+
+    <style>
+        .range-slider-container {
+            width: 100%;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .slider-track-bg {
+            position: absolute;
+            width: 100%;
+            height: 6px;
+            background-color: #dee2e6;
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        .slider-track-fill {
+            position: absolute;
+            height: 6px;
+            background-color: #2C3035;
+            border-radius: 5px;
+            z-index: 2;
+        }
+
+        .double-range {
+            position: absolute;
+            width: 100%;
+            background: none;
+            pointer-events: none;
+            -webkit-appearance: none;
+            z-index: 3;
+            margin: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+            .double-range::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 20px;
+                height: 20px;
+                background-color: #2C3035;
+                border: 2px solid #fff;
+                border-radius: 50%;
+                cursor: pointer;
+                pointer-events: auto;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                margin-top: -1px;
+            }
+
+            .double-range::-moz-range-thumb {
+                width: 20px;
+                height: 20px;
+                background-color: #2C3035;
+                border: 2px solid #fff;
+                border-radius: 50%;
+                cursor: pointer;
+                pointer-events: auto;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            }
+
+        .anuncio-card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+            .anuncio-card-hover:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+            }
+
+        .offcanvas-header {
+            display: none;
+        }
+
+        @@media (max-width: 991px) {
+            .offcanvas-header {
+                display: flex;
+            }
+        }
+    </style>
+}

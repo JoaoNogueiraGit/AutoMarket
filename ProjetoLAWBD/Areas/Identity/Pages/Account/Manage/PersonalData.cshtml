@@ -1,0 +1,62 @@
+﻿@page
+@model PersonalDataModel
+@{
+    ViewData["Title"] = "Dados Pessoais";
+    ViewData["ActivePage"] = ManageNavPages.PersonalData;
+}
+
+<h3 class="fw-bold mb-1">@ViewData["Title"]</h3>
+<p class="text-muted mb-4">Controlo total sobre a sua informação e privacidade.</p>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-4 p-md-5">
+
+        <div class="alert alert-light border d-flex align-items-center mb-5" role="alert">
+            <i class="fas fa-user-shield fa-2x text-primary me-3"></i>
+            <div>
+                <h5 class="alert-heading h6 fw-bold mb-0">Gestão de Privacidade</h5>
+                <small class="text-muted">A sua conta contém dados pessoais que nos forneceu. Esta página permite-lhe descarregar uma cópia ou eliminar permanentemente esses dados.</small>
+            </div>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-12">
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center p-3 border rounded bg-white">
+                    <div class="mb-3 mb-sm-0">
+                        <h5 class="fw-bold mb-1">
+                            <i class="fas fa-file-download me-2 text-dark"></i>Descarregar os seus dados
+                        </h5>
+                        <p class="text-muted small mb-0">Obtenha uma cópia dos seus dados pessoais num formato legível (JSON).</p>
+                    </div>
+                    <form id="download-data" asp-page="DownloadPersonalData" method="post">
+                        <button class="btn btn-outline-dark text-nowrap" type="submit">
+                            Descarregar
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center p-3 border border-danger border-opacity-25 rounded bg-danger bg-opacity-10">
+                    <div class="mb-3 mb-sm-0">
+                        <h5 class="fw-bold text-danger mb-1">
+                            <i class="fas fa-trash-alt me-2"></i>Eliminar Conta
+                        </h5>
+                        <p class="text-danger small mb-0">
+                            <strong>Atenção:</strong> Esta ação remove permanentemente a sua conta e não pode ser recuperada.
+                        </p>
+                    </div>
+                    <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger text-nowrap">
+                        Eliminar
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,137 @@
+﻿@page
+@model EnableAuthenticatorModel
+@{
+    ViewData["Title"] = "Configurar Autenticação";
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<h3 class="fw-bold mb-1">@ViewData["Title"]</h3>
+<p class="text-muted mb-4">Siga os passos abaixo para aumentar a segurança da sua conta.</p>
+
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-4 p-md-5">
+
+        <div class="mb-5">
+            <h5 class="fw-bold mb-3">
+                <span class="badge bg-dark rounded-pill me-2">1</span>
+                Descarregar Aplicação
+            </h5>
+            <p class="text-muted ms-4 mb-3">
+                Instale uma aplicação de autenticação gratuita no seu telemóvel. Recomendamos:
+            </p>
+            <div class="ms-4 d-flex flex-wrap gap-3">
+                <div class="p-3 border rounded bg-light flex-fill">
+                    <strong class="d-block mb-2"><i class="fab fa-microsoft text-primary me-2"></i>Microsoft Authenticator</strong>
+                    <div class="small">
+                        <a href="https://go.microsoft.com/fwlink/?Linkid=825072" target="_blank" class="text-decoration-none me-2">Android</a>
+                        <span class="text-muted">|</span>
+                        <a href="https://go.microsoft.com/fwlink/?Linkid=825073" target="_blank" class="text-decoration-none ms-2">iOS</a>
+                    </div>
+                </div>
+                <div class="p-3 border rounded bg-light flex-fill">
+                    <strong class="d-block mb-2"><i class="fab fa-google text-danger me-2"></i>Google Authenticator</strong>
+                    <div class="small">
+                        <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en" target="_blank" class="text-decoration-none me-2">Android</a>
+                        <span class="text-muted">|</span>
+                        <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8" target="_blank" class="text-decoration-none ms-2">iOS</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4 text-muted opacity-25">
+
+        <div class="mb-5">
+            <h5 class="fw-bold mb-3">
+                <span class="badge bg-dark rounded-pill me-2">2</span>
+                Digitalizar Código QR
+            </h5>
+            <div class="row ms-2">
+                <div class="col-md-5 text-center mb-3 mb-md-0">
+                    <div class="p-3 border rounded d-inline-block bg-white shadow-sm">
+                        <div id="qrCode"></div>
+                        <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
+                    </div>
+                    <p class="small text-muted mt-2 mb-0">Abra a App e aponte a câmara.</p>
+                </div>
+                <div class="col-md-7 d-flex flex-column justify-content-center">
+                    <div class="alert alert-warning border-warning d-flex align-items-start">
+                        <i class="fas fa-info-circle mt-1 me-3"></i>
+                        <div>
+                            <strong>Não consegue ler o QR?</strong>
+                            <p class="small mb-2">Insira esta chave manualmente na aplicação:</p>
+
+                            <div class="input-group">
+                                <code class="form-control font-monospace bg-white text-dark" id="sharedKeyInput">@Model.SharedKey</code>
+                                <button class="btn btn-outline-secondary" type="button" onclick="copiarChave()" title="Copiar Chave">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4 text-muted opacity-25">
+
+        <div class="mb-2">
+            <h5 class="fw-bold mb-3">
+                <span class="badge bg-dark rounded-pill me-2">3</span>
+                Confirmar Configuração
+            </h5>
+            <p class="text-muted ms-4 mb-3">Insira o código de 6 dígitos gerado pela aplicação para ativar a proteção.</p>
+
+            <div class="ms-4 col-md-6">
+                <form id="send-code" method="post">
+                    <div class="mb-3">
+                        <label asp-for="Input.Code" class="form-label text-muted small fw-bold">Código de Verificação</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white text-muted border-end-0">
+                                <i class="fas fa-key"></i>
+                            </span>
+                            <input asp-for="Input.Code" class="form-control border-start-0 fs-5" autocomplete="off" placeholder="000 000" maxlength="7" />
+                        </div>
+                        <span asp-validation-for="Input.Code" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100 py-2 fw-bold">
+                        Verificar e Ativar
+                    </button>
+                    <div asp-validation-summary="ModelOnly" class="text-danger mt-2 small" role="alert"></div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript" src="~/lib/qrcodejs/qrcode.min.js"></script>
+    <script type="text/javascript" src="~/js/qr.js"></script>
+
+    <script>
+        // Função Extra para copiar a chave manual
+        function copiarChave() {
+            var copyText = document.getElementById("sharedKeyInput");
+            navigator.clipboard.writeText(copyText.innerText).then(function() {
+                // Feedback visual simples
+                var btn = document.querySelector('button[onclick="copiarChave()"]');
+                var originalHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                btn.classList.remove('btn-outline-secondary');
+                btn.classList.add('btn-success');
+
+                setTimeout(function() {
+                    btn.innerHTML = originalHtml;
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-outline-secondary');
+                }, 2000);
+            });
+        }
+    </script>
+}

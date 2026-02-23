@@ -1,0 +1,50 @@
+﻿@model ProjetoLAWBD.ViewModels.AgendamentosUnificadosViewModel
+@{
+    ViewData["Title"] = "Reservas e Visitas";
+    ViewData["ActivePage"] = "Reservas";
+    Layout = "~/Views/Shared/_CompradorLayout.cshtml";
+}
+
+<h3 class="fw-bold mb-4">As Minhas Reservas e Visitas</h3>
+
+<ul class="nav nav-tabs mb-4 border-bottom-0" id="reservaTabs" role="tablist">
+    <li class="nav-item">
+        <button class="nav-link active text-dark fw-bold border-0 border-bottom border-dark"
+                id="ativas-tab" data-bs-toggle="tab" data-bs-target="#ativas" type="button">
+            Ativas (@Model.Ativas.Count)
+        </button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link text-muted border-0"
+                id="historico-tab" data-bs-toggle="tab" data-bs-target="#historico" type="button">
+            Histórico (@Model.Historico.Count)
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="ativas" role="tabpanel">
+        <div id="lista-ativas">
+            <partial name="_ListaReservasAtivasPartial" model="Model.Ativas" />
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="historico" role="tabpanel">
+        @foreach (var item in Model.Historico)
+        {
+            <div class="card mb-3 border-0 bg-light opacity-75">
+                <div class="card-body">
+                    <h5 class="fw-bold text-muted">@item.NomeModelo</h5>
+                    <span class="badge bg-secondary bg-opacity-25 text-secondary px-3 py-2 rounded-pill mb-2">
+                        @item.Tipo.ToUpper() @item.Estado.ToUpper()
+                    </span>
+                    <p class="small text-muted mb-0">O processo terminou em @item.DataPedido.ToString("dd/MM/yyyy")</p>
+                </div>
+            </div>
+        }
+        @if (!Model.Historico.Any())
+        {
+            <p class="text-muted text-center p-4">O histórico está vazio.</p>
+        }
+    </div>
+</div>

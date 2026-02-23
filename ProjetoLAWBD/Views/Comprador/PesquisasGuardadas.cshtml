@@ -1,0 +1,13 @@
+﻿@model List<ProjetoLAWBD.ViewModels.PesquisaGuardadaViewmodel>
+@{
+    ViewData["Title"] = "Pesquisas Guardadas";
+    ViewData["ActivePage"] = "Filtros";
+    Layout = "~/Views/Shared/_CompradorLayout.cshtml";
+}
+
+<h3 class="fw-bold mb-2">As Minhas Pesquisas Guardadas</h3>
+<p class="text-muted mb-4">Aceda rapidamente aos seus filtros favoritos.</p>
+
+<div id="container-filtros">
+    <partial name="_ListaFiltrosPartial" model="Model" />
+</div>

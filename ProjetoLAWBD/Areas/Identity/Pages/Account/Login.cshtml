@@ -1,0 +1,136 @@
+﻿@page
+@model LoginModel
+@inject IConfiguration Configuration
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div class="registration-container">
+
+    @if (Model.IsAccountLocked)
+    {
+        <h2>Acesso Bloqueado</h2>
+        <p>Não foi possível aceder à sua conta.</p>
+    }
+    else
+    {
+        <h2>Bem-vindo de volta</h2>
+        <p>Entre na sua conta para continuar</p>
+    }
+
+    @if (!Model.IsAccountLocked)
+    {
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+    }
+
+    @if (Model.IsAccountLocked)
+    {
+        <div class="alert alert-danger d-flex align-items-center mb-3" role="alert">
+            <i class="fas fa-exclamation-triangle fa-lg me-3"></i>
+            <div>
+                <strong>A sua conta foi bloqueada.</strong><br>
+                Motivo: @Model.MotivoBloqueio. Para mais informações, contacte o suporte.
+            </div>
+        </div>
+    }
+
+    <form id="account" method="post">
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="teu@email.com" />
+            <label asp-for="Input.Email">Email</label>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="********" />
+            <label asp-for="Input.Password">Palavra-passe</label>
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+
+        @if (Model.IsAccountLocked)
+        {
+            <div class="text-center mb-3">
+                <a asp-page="/Support/Contact">Contactar Suporte</a>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="Input.RememberMe" id="rememberMeCheckbox">
+                    <label class="form-check-label" for="rememberMeCheckbox">
+                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                    </label>
+                </div>
+                <p class="m-0"><a id="forgot-password" asp-page="./ForgotPassword">Esqueceu a palavra-passe?</a></p>
+            </div>
+        }
+
+        <div class="form-group mb-3 d-flex justify-content-center">
+            <div class="g-recaptcha" data-sitekey="@Configuration["reCAPTCHA:SiteKey"]"></div>
+        </div>
+
+        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary mb-3 button-submit">Entrar</button>
+    </form>
+
+    <section>
+        <div class="separator">ou continue com</div>
+
+        @{
+            if ((Model.ExternalLogins?.Count ?? 0) == 0)
+            {
+                <div><p>Não há serviços de login externos configurados.</p></div>
+            }
+            else
+            {
+                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div class="external-login-buttons">
+                        @foreach (var provider in Model.ExternalLogins!)
+                        {
+                            <button type="submit" class="btn btn-external @provider.Name.ToLower()"
+                                    name="provider" value="@provider.Name"
+                                    title="Entrar com a sua conta @provider.DisplayName">
+
+                                @if (provider.Name == "Google")
+                                {
+                                    <img src="~/icons/google-icon.svg" alt="Google"
+                                         width="18" height="18"
+                                         class="me-2" style="vertical-align: text-bottom;" />
+                                }
+                                else if (provider.Name == "Twitter")
+                                {
+                                    <img src="~/icons/x-icon.svg" alt="X"
+                                         width="18" height="18"
+                                         class="me-2" style="vertical-align: text-bottom;" />
+                                }
+                                
+
+                                @provider.DisplayName
+                            </button>
+                        }
+                    </div>
+                </form>
+            }
+        }
+    </section>
+
+    <div class="login-links">
+        <p>
+            Ainda não tem conta?
+            <a asp-page="./RegisterBuyer">Criar conta</a>
+        </p>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth-layout.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+}

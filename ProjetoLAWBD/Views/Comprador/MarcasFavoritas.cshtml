@@ -1,0 +1,29 @@
+﻿@model ProjetoLAWBD.ViewModels.CompradorMarcasFavoritasViewModel
+@{
+    ViewData["Title"] = "Marcas Favoritas";
+    ViewData["ActivePage"] = "Marcas"; // Isto ativa o link na sidebar
+    Layout = "~/Views/Shared/_CompradorLayout.cshtml";
+}
+
+<h3 class="fw-bold mb-2">As Minhas Marcas Favoritas</h3>
+<p class="text-muted mb-4">Receberá notificações sobre novos anúncios das marcas que selecionar.</p>
+
+<label class="small text-muted mb-2">Adicionar nova marca</label>
+
+<form asp-action="AdicionarMarcaFavorita" asp-controller="Comprador" method="post"
+      class="d-flex gap-3 mb-5"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-mode="replace"
+      data-ajax-update="#lista-marcas">
+
+    <select name="idMarca" asp-items="Model.TodasMarcas" class="form-select bg-white" required>
+        <option value="">Selecione uma marca...</option>
+    </select>
+
+    <button type="submit" class="btn btn-dark px-4">Adicionar</button>
+</form>
+
+<div id="lista-marcas">
+    <partial name="_ListaMarcasPartial" model="Model.MinhasMarcas" />
+</div>

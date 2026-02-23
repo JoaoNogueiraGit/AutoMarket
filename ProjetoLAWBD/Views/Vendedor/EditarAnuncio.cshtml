@@ -1,0 +1,150 @@
+﻿@model ProjetoLAWBD.ViewModels.VendedorMeusAnunciosEditarAnuncioViewModel
+
+@{
+    ViewData["Title"] = "Editar Anúncio";
+    Layout = "~/Views/Shared/_VendedorLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="h2 pt-4" style="font-weight:bold">@ViewData["Title"]</h2>
+        <p class="text-muted">
+            Edite as informações de venda do veículo.
+        </p>
+    </div>
+    <a asp-action="MeusAnuncios" class="btn btn-light">
+        <i class="fas fa-arrow-left me-1"></i> Voltar aos Meus Anúncios
+    </a>
+</div>
+
+<div class="card anuncio-card shadow-sm">
+    <div class="card-body p-4 p-md-5">
+
+        <div class="alert alert-light border d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+            <div>
+                <h5 class="mb-1 text-dark">
+                    <i class="fas fa-car me-2 text-muted"></i>
+                    @Model.Anuncio.Veiculo.Modelo.Marca.Nome @Model.Anuncio.Veiculo.Modelo.Nome
+                </h5>
+                <small class="text-muted">Deseja alterar as fotos, quilómetros ou características técnicas?</small>
+            </div>
+
+            <a asp-action="EditarVeiculo"
+               asp-route-id="@Model.Anuncio.IdVeiculo"
+               class="btn btn-outline-dark btn-sm"
+               onclick="return confirm('ATENÇÃO: Tem alterações não guardadas neste anúncio.\n\nSe sair agora para editar o veículo, perderá o que escreveu aqui.\nDeseja continuar mesmo assim?');">
+                <i class="fas fa-edit me-1"></i> Editar Veículo
+            </a>
+        </div>
+
+        <form asp-action="EditarAnuncio" method="post">
+
+            <input type="hidden" asp-for="Anuncio.IdAnuncio" />
+            <input type="hidden" asp-for="Anuncio.IdVeiculo" /> <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row g-3">
+                <div class="col-12">
+                    <label asp-for="Anuncio.Titulo" class="form-label">Título do Anúncio *</label>
+                    <input asp-for="Anuncio.Titulo" class="form-control" placeholder="Ex: BMW 320d M Sport (Como Novo)" />
+                    <span asp-validation-for="Anuncio.Titulo" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Anuncio.Descricao" class="form-label">Descrição</label>
+                    <textarea asp-for="Anuncio.Descricao" class="form-control" rows="6" placeholder="Descreva o estado do veículo, extras, etc."></textarea>
+                    <span asp-validation-for="Anuncio.Descricao" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Anuncio.Preco" class="form-label">Preço (€) *</label>
+                    <input asp-for="Anuncio.Preco" class="form-control" type="tel" asp-format="{0:0}" />
+                    <span asp-validation-for="Anuncio.Preco" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Anuncio.LocalizacaoCidade" class="form-label">Localização (Cidade/Concelho) *</label>
+                    <input asp-for="Anuncio.LocalizacaoCidade"
+                           class="form-control"
+                           list="listaLocais"
+                           placeholder="Escreva para pesquisar (ex: Lisboa, Porto...)"
+                           autocomplete="off" />
+
+                    <datalist id="listaLocais"></datalist>
+
+                    <span asp-validation-for="Anuncio.LocalizacaoCidade" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="text-end mt-5">
+                <a asp-action="MeusAnuncios" class="btn btn-light me-2">Cancelar</a>
+                <button type="submit" class="btn btn-dark">Guardar Alterações</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const inputLoc = document.getElementById('inputLocalizacao'); // O teu input
+            const dataList = document.getElementById('listaLocais');      // A lista <datalist>
+
+            // NOVO: Array para guardar os nomes válidos em memória
+            let locaisValidos = [];
+
+            fetch('/dados/locais.json')
+                .then(response => response.json())
+                .then(data => {
+                    dataList.innerHTML = '';
+                    locaisValidos = []; // Limpar array
+
+                    // Filtrar apenas municípios
+                    const apenasCidades = data.filter(item => item.type === 'municipio');
+
+                    apenasCidades.forEach(local => {
+                        // 1. Criar opção para o HTML
+                        const option = document.createElement('option');
+                        option.value = local.name;
+                        dataList.appendChild(option);
+
+                        // 2. NOVO: Guardar no array de validação
+                        locaisValidos.push(local.name);
+                    });
+                })
+                .catch(error => console.error('Erro ao carregar locais:', error));
+
+            // NOVO: Adicionar Validação ao Input
+            inputLoc.addEventListener('change', function() {
+                const valorAtual = this.value;
+
+                // Se o campo estiver vazio, deixamos passar (o atributo 'required' do HTML trata disso)
+                if(valorAtual === "") {
+                    this.setCustomValidity("");
+                    return;
+                }
+
+                // Verifica se o que o user escreveu está na lista de locais válidos
+                if (locaisValidos.includes(valorAtual)) {
+                    // Válido: Limpa qualquer mensagem de erro
+                    this.setCustomValidity("");
+                } else {
+                    // Inválido: Define uma mensagem de erro que impede o submit
+                    this.setCustomValidity("Selecione uma localidade válida da lista.");
+
+                    // Opcional: Se quiseres ser agressivo e apagar o texto errado logo:
+                    // this.value = "";
+                    // alert("Por favor selecione uma cidade da lista.");
+                }
+            });
+
+            // NOVO: Limpar erro enquanto o utilizador escreve para não atrapalhar
+            inputLoc.addEventListener('input', function() {
+                this.setCustomValidity("");
+            });
+        });
+    </script>
+}

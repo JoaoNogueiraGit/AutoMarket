@@ -1,0 +1,11 @@
+﻿@model ProjetoLAWBD.ViewModels.VendedorGerirPedidosViewModel
+@{
+    ViewData["Title"] = "Gerir Pedidos";
+    Layout = "~/Views/Shared/_VendedorLayout.cshtml";
+}
+
+<h1 class="h2 pt-4 fw-bold">Gerir Pedidos de Visita e Reserva</h1>
+
+<div id="container-pedidos">
+    <partial name="_ListaPedidosPartial" model="Model" />
+</div>

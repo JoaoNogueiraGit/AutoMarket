@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/vendedor-dashboard.css" asp-append-version="true" />
+
+    <!-- Carrega o css do FilePond -->
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
+
+    <!-- para as Views-filhas (ex: MeusAnuncios) adicionarem o seu próprio CSS -->
+    @await RenderSectionAsync("Styles", required: false)
+}
+
+<div class="dashboard-vendedor-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+
+            
+            @await RenderSectionAsync("Sidebar", required: true)
+
+            
+            <main role="main" class="col-12 col-md-9 col-lg-9 dashboard-main-content">
+                @RenderBody()
+            </main>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Carrega os scripts do filepond -->
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
+    <!-- para as Views-filhas (ex: AdicionarVeiculo) adicionarem os seus scripts -->
+    @await RenderSectionAsync("Scripts", required: false)
+}

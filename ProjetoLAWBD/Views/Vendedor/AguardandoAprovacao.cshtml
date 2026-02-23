@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Aprovação Pendente";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Ou _VendedorLayout se preferires, mas sem menus funcionais
+}
+
+<div class="container mt-5 text-center">
+    <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+        <div class="card-body p-5">
+            <div class="mb-4">
+                <i class="fas fa-clock fa-4x text-warning"></i>
+            </div>
+            <h2 class="h3 fw-bold mb-3">Conta em Análise</h2>
+            <p class="text-muted mb-4">
+                Os seus dados de faturação foram submetidos com sucesso.
+                A nossa equipa administrativa está a analisar a sua conta.
+            </p>
+            <div class="alert alert-light border">
+                <i class="fas fa-info-circle me-2"></i>
+                Não poderá aceder ao painel de vendedor nem publicar anúncios até que a validação esteja concluída.
+            </div>
+
+            <hr class="my-4">
+
+            <p class="small text-muted">Precisa de corrigir algum dado?</p>
+            <a asp-action="DadosFaturacao" asp-controller="Vendedor" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-edit me-2"></i>Editar Dados de Faturação
+            </a>
+        </div>
+    </div>
+</div>

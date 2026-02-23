@@ -1,0 +1,58 @@
+﻿@model ProjetoLAWBD.Models.Anuncio
+@{
+    ViewData["Title"] = "Sucesso";
+    Layout = "~/Views/Shared/_VendedorLayout.cshtml"; // (Usa o teu layout da dashboard)
+}
+
+<!-- Wrapper para centrar verticalmente e horizontalmente -->
+<div class="d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+
+    <!-- O card branco principal, centrado -->
+    <div class="card anuncio-card shadow-sm text-center" style="max-width: 600px; width: 100%;">
+        <div class="card-body p-4 p-md-5">
+
+            
+            <div class="rounded-circle d-inline-flex justify-content-center align-items-center mb-4"
+                 style="width: 80px; height: 80px; background-color: #d4edda;">
+
+                <img src="~/icons/check-svgrepo-com.svg" alt="Sucesso" width="40" height="40" />
+            </div>
+            
+
+            <h2 class="h3 font-weight-bold mb-3">Anúncio criado com sucesso!</h2>
+            <p class="text-muted mb-4">O seu veículo está agora publicado na plataforma.</p>
+
+            <!-- Card de Sumário (cinzento-claro) -->
+            <div class="card mt-4 mb-4" style="background-color: #f8f9fa; border: 1px solid #e9ecef; max-width: 400px; margin: 0 auto; text-align: left;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted small">Número de referência:</span>
+                        <strong class="text-dark">@Model.IdAnuncio</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted small">Veículo:</span>
+                        <strong class="text-dark">@Model.Titulo</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted small">Preço:</span>
+                        <strong class="text-dark">@Model.Preco.ToString("C", new System.Globalization.CultureInfo("pt-PT"))</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted small">Estado:</span>
+                        <span class="badge bg-success">@Model.Estado</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted small">Data de publicação:</span>
+                        <strong class="text-dark">@Model.DataPublicacao.ToString("dd/MM/yyyy 'às' HH:mm")</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="mt-4">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-light me-2">Voltar à Página Principal</a>
+                <a asp-controller="Vendedor" asp-action="MeusAnuncios" class="btn btn-dark">Ver os Meus Anúncios</a>
+            </div>
+        </div>
+    </div>
+</div>

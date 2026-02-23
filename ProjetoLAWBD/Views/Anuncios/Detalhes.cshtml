@@ -1,0 +1,326 @@
+﻿@model ProjetoLAWBD.ViewModels.AnuncioDetalhesViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@using System.Security.Claims;
+@{
+    ViewData["Title"] = Model.Anuncio.Titulo;
+    Layout = "~/Views/Shared/_Layout.cshtml"; // O Layout PÚBLICO (sem sidebar)
+
+    // Lógica para encontrar a imagem principal
+    var imgPrincipal = Model.Imagens.OrderBy(i => i.OrdemExibicao).FirstOrDefault(i => i.IsCapa)
+                        ?? Model.Imagens.OrderBy(i => i.OrdemExibicao).FirstOrDefault();
+
+    var imgUrlPrincipal = imgPrincipal != null
+                          ? Url.Content(imgPrincipal.CaminhoFicheiro)
+                          : Url.Content("~/images/placeholder-anuncio.png");
+
+    var imgPrincipalId = imgPrincipal?.IdImagem ?? 0;
+}
+
+<div class="container my-4">
+
+    <nav aria-label="breadcrumb" class="mb-2">
+        <ol class="breadcrumb" style="background: none; padding-left: 0;">
+            <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Início</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Anuncios">Anúncios</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Anuncio.Veiculo.Modelo.Marca.Nome</li>
+            
+        </ol>
+    </nav>
+
+    <h1 class="h2" style="font-weight: 600;">@Model.Anuncio.Titulo</h1>
+    
+    <p class="text-muted">
+        @Model.Anuncio.Veiculo.DataMatricula.Year •
+        @Model.Anuncio.Veiculo.KmTotal.ToString("N0") km •
+        @Model.Anuncio.Veiculo.Combustivel.Nome •
+        @Model.Anuncio.LocalizacaoCidade
+    </p>
+
+    <div class="row mt-4">
+
+        <div class="col-lg-8">
+
+            <div class="mb-3">
+                <a href="@imgUrlPrincipal" 
+                   data-fancybox="gallery" 
+                   data-caption="(Foto 1)">
+       
+                    <img src="@imgUrlPrincipal" id="main-image" class="img-fluid rounded shadow-sm" 
+                         alt="Imagem Principal" 
+                         style="width: 100%; height: auto; max-height: 500px; object-fit: cover;">
+                </a>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                @foreach (var img in Model.Imagens.Where(i => i.IdImagem != imgPrincipalId).OrderBy(i => i.OrdemExibicao)) {
+                    <a href="@Url.Content(img.CaminhoFicheiro)"
+                       data-fancybox="gallery" 
+                       data-caption="(Foto @img.OrdemExibicao)">
+
+                        <img src="@Url.Content(img.CaminhoFicheiro)" class="img-thumbnail thumbnail-clickable"
+                             style="width: 100px; height: 100px; object-fit: cover;"
+                             alt="Miniatura @img.OrdemExibicao">
+                    </a>
+                }
+            </div>
+
+            <hr>
+
+            <h3 class="h4 mt-4 mb-3">Especificações Técnicas</h3>
+            <div class="row g-3">
+                <div class="col-md-4"><strong>Marca:</strong><br> @Model.Anuncio.Veiculo.Modelo.Marca.Nome</div>
+                <div class="col-md-4"><strong>Modelo:</strong><br> @Model.Anuncio.Veiculo.Modelo.Nome</div>
+                <div class="col-md-4"><strong>Ano:</strong><br> @Model.Anuncio.Veiculo.DataMatricula.Year</div>
+
+                <div class="col-md-4"><strong>Quilómetros:</strong><br> @Model.Anuncio.Veiculo.KmTotal.ToString("N0") km</div>
+                <div class="col-md-4"><strong>Combustível:</strong><br> @Model.Anuncio.Veiculo.Combustivel.Nome</div>
+                <div class="col-md-4"><strong>Potência:</strong><br> @Model.Anuncio.Veiculo.PotenciaCV cv</div>
+
+                <div class="col-md-4"><strong>Transmissão:</strong><br> @Model.Anuncio.Veiculo.Caixa.Nome</div>
+                <div class="col-md-4"><strong>Cor:</strong><br> @Model.Anuncio.Veiculo.Cor.Nome</div>
+                <div class="col-md-4"><strong>Cilindrada:</strong><br> @Model.Anuncio.Veiculo.CilindradaCC cc</div>
+
+                <div class="col-md-4"><strong>Lugares:</strong><br> @Model.Anuncio.Veiculo.NumLugares</div>
+                <div class="col-md-4"><strong>Portas:</strong><br> @Model.Anuncio.Veiculo.NumPortas</div>
+                <div class="col-md-4"><strong>Categoria:</strong><br> @Model.Anuncio.Veiculo.Categoria.Nome</div>
+            </div>
+
+        </div> <div class="col-lg-4">
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body p-4">
+
+                    <h2 class="h2 mb-1" style="font-weight: 700;">
+                        @Model.Anuncio.Preco.ToString("C", new System.Globalization.CultureInfo("pt-PT"))
+                    </h2>
+
+                    <p class="text-muted small">
+                        <i class="far fa-clock me-1"></i> Publicado @Model.Anuncio.DataPublicacao.TempoDecorrido()
+                    </p>
+
+                    <hr> <h5 class="card-title mb-3 mt-4">Contactar Vendedor</h5>
+
+                    <div class="bg-light p-3 rounded mb-3 border">
+                    <p class="small fw-bold text-uppercase text-muted mb-2">Dados de Contacto</p>
+
+                    @if (Model.ContactosVendedor != null && Model.ContactosVendedor.Any())
+                    {
+                        @foreach (var c in Model.ContactosVendedor)
+                        {
+                            <div class="mb-2">
+                                @if (c.TipoContacto == "Email")
+                                {
+                                    <i class="fas fa-envelope text-muted me-2" style="width:20px; text-align:center;"></i>
+                                    <a href="mailto:@c.ValorContacto" class="text-decoration-none text-dark fw-bold">
+                                        @c.ValorContacto
+                                    </a>
+                                }
+                                else if (c.TipoContacto == "Telemóvel" || c.TipoContacto == "Telefone Fixo" || c.TipoContacto == "WhatsApp")
+                                {
+                                    <i class="fas @(c.TipoContacto == "Telefone Fixo" ? "fa-phone" : "fa-mobile-alt") text-muted me-2" style="width:20px; text-align:center;"></i>
+                    
+                                    <a href="tel:@c.ValorContacto" class="text-decoration-none text-dark fw-bold">
+                                        @c.ValorContacto
+                                    </a>
+
+                                    @if (c.TipoContacto != "Telefone Fixo")
+                                    {
+                                        <a href="https://wa.me/@(c.ValorContacto.Replace(" ", "").Replace("+", ""))" target="_blank" class="ms-2 text-success" title="Enviar WhatsApp">
+                                            <i class="fab fa-whatsapp"></i>
+                                        </a>
+                                    }
+                    
+                                    <small class="text-muted ms-1" style="font-size: 0.7rem;">(@c.TipoContacto)</small>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-address-book text-muted me-2" style="width:20px; text-align:center;"></i>
+                                    <span class="text-dark">@c.ValorContacto</span>
+                                }
+                            </div>
+                        }
+                    }
+    
+                    <div class="mb-2 border-top pt-2 mt-2">
+                        <i class="fas fa-user-circle text-muted me-2" style="width:20px; text-align:center;"></i>
+                        <a href="mailto:@Model.Anuncio.Vendedor.user.Email" class="text-decoration-none text-dark">
+                            @Model.Anuncio.Vendedor.user.Email
+                        </a>
+                        <span class="badge bg-light text-muted border ms-2">Conta</span>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Anuncio.Vendedor.CidadeFaturacao))
+                    {
+                        <div>
+                            <i class="fas fa-map-marker-alt text-muted me-2" style="width:20px; text-align:center;"></i>
+                            <span class="text-dark">@Model.Anuncio.Vendedor.CidadeFaturacao</span>
+                        </div>
+                    }
+                </div>
+
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="user-avatar-sm me-2">
+                            <span>@(Model.Anuncio.Vendedor.user.NomeCompleto?.Substring(0, 1) ?? "V")</span>
+                        </div>
+                        <div>
+                            <strong class="d-block">@Model.Anuncio.Vendedor.user.NomeCompleto</strong>
+                            <small class="text-muted">@Model.Anuncio.Vendedor.TipoVendedor</small>
+                        </div>
+                    </div>
+
+                    @if (SignInManager.IsSignedIn(User)) {
+                        var currentUserId = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+                        var isOwner = currentUserId == Model.Anuncio.Vendedor.IdUtilizador;
+
+                        @if (User.IsInRole("Comprador"))
+                        {
+                            <div class="d-grid gap-2">
+                                <a asp-controller="Checkout" 
+                                   asp-action="Index" 
+                                   asp-route-id="@Model.Anuncio.IdAnuncio" 
+                                   class="btn btn-dark btn-lg w-100 shadow-sm mb-2">
+                                    <i class="fas fa-shopping-cart me-2"></i>Comprar Agora
+                                </a>
+
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <form asp-action="Reservar" method="post">
+                                            <input type="hidden" name="anuncioId" value="@Model.Anuncio.IdAnuncio" />
+                                            <button type="submit" class="btn btn-outline-dark w-100">
+                                                <i class="fas fa-clock me-1"></i>Reservar
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="col-6">
+                                        <button type="button" class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#modalVisita">
+                                            <i class="fas fa-calendar-check me-1"></i>Visitar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="modal fade" id="modalVisita" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content border-0 shadow">
+                                    <div class="modal-header bg-light">
+                                        <h5 class="modal-title fw-bold">Agendar Visita</h5>
+                                        <button type="button" class="btn-close" data-bs-toggle="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form asp-action="Visitar" method="post">
+                                        <div class="modal-body p-4">
+                                            <input type="hidden" name="anuncioId" value="@Model.Anuncio.IdAnuncio" />
+
+                                            <p class="text-muted small mb-4">Selecione a data e hora preferencial para visitar o <strong>@Model.Anuncio.Veiculo.Modelo.Marca.Nome @Model.Anuncio.Veiculo.Modelo.Nome</strong>.</p>
+
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-bold">Data e Hora</label>
+                                                <input type="datetime-local" name="dataSugerida" class="form-control" required
+                                                       min="@DateTime.Now.AddHours(1).ToString("yyyy-MM-ddTHH:mm")">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer border-0">
+                                            <button type="button" class="btn btn-link text-muted text-decoration-none" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-dark px-4">Enviar Pedido</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (User.IsInRole("Vendedor")) {
+                            if (isOwner) {
+                                <div class="d-grid gap-2 mt-3">
+                                    <a asp-controller="Vendedor" asp-action="EditarAnuncio" asp-route-id="@Model.Anuncio.IdAnuncio" class="btn btn-warning text-dark fw-bold">
+                                        <i class="fas fa-edit me-2"></i>Editar Anúncio
+                                    </a>
+                                </div>
+                            }
+                            else {
+                                <div class="alert alert-warning mt-3 small" role="alert">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Está logado como Vendedor. Para comprar este veículo, entre com a sua conta de Comprador.
+                                </div>
+                            }
+                        }
+
+                        @if (User.IsInRole("Administrador")) {
+                            <div class="mt-4 pt-3 border-top">
+                                <p class="small text-danger fw-bold mb-1">Área Administrativa</p>
+                                <form asp-controller="Admin" asp-action="RemoverAnuncio" method="post" onsubmit="return confirm('Tem a certeza que deseja remover este anúncio?');">
+                                    <input type="hidden" name="anuncioId" value="@Model.Anuncio.IdAnuncio" />
+                                    <button type="submit" class="btn btn-danger w-100 btn-sm">
+                                        <i class="fas fa-trash-alt me-2"></i>Remover Anúncio (Admin)
+                                    </button>
+                                </form>
+                            </div>
+                        }
+                    }
+                    else {
+                        <div class="d-grid gap-2 mt-3">
+                            <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Login">
+                                Iniciar Sessão para Contactar
+                            </a>
+                            <div class="text-center small mt-2">
+                                Ainda não tem conta? <a asp-area="Identity" asp-page="/Account/RegisterBuyer" class="text-decoration-none fw-bold">Registe-se gratuitamente</a>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+            <hr class="my-3">
+            <h3 class="h4 mb-3">Descrição</h3>
+            <p style="white-space: pre-wrap;">@Model.Anuncio.Descricao</p>
+
+        </div>
+
+    </div>
+@section Styles {
+    <style>
+        .user-avatar-sm {
+            width: 40px;
+            height: 40px;
+            background-color: #e9ecef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .thumbnail-clickable {
+            cursor: pointer;
+        }
+
+            .thumbnail-clickable:hover {
+                border-color: #0d6efd;
+                opacity: 0.8;
+            }
+
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .breadcrumb-item a {
+            text-decoration: none;
+        }
+
+        
+    </style>
+}
+
+@section Scripts {
+    <script>
+        Fancybox.bind("[data-fancybox]", {
+            Images: {
+                zoom: true,
+            }
+        });
+    </script>
+}

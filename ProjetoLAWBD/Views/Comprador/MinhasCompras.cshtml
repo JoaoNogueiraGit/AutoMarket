@@ -1,0 +1,43 @@
+﻿@model List<ProjetoLAWBD.ViewModels.CompraViewModel>
+@{
+    ViewData["Title"] = "Marcas Favoritas";
+    ViewData["ActivePage"] = "Compras"; // Isto ativa o link na sidebar
+    Layout = "~/Views/Shared/_CompradorLayout.cshtml";
+}
+
+<h3 class="fw-bold mb-5">O Meu Histórico de Compras</h3>
+
+@foreach (var compra in Model)
+{
+    <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px;">
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+
+                <div class="col-auto">
+                    <div class="bg-light rounded overflow-hidden" style="width: 80px; height: 80px;">
+                        @if (!string.IsNullOrEmpty(compra.ImagemUrl))
+                        {
+                            <img src="@compra.ImagemUrl" class="w-100 h-100 object-fit-cover" />
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center justify-content-center h-100 text-muted small">
+                                Sem foto
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col">
+                    <h6 class="fw-bold mb-1">@compra.NomeVeiculo</h6>
+                    <p class="text-muted small mb-0">Comprado em: @compra.DataCompra.ToString("dd/MM/yyyy")</p>
+                </div>
+
+                <div class="col-auto text-end d-flex align-items-center gap-4">
+                    <h5 class="fw-bold mb-0">@compra.ValorTotal.ToString("N2") €</h5>
+                    <a target="_blank" asp-action="VerFatura" asp-controller="Comprador" asp-route-id="@compra.IdCompra" class="btn btn-outline-dark btn-sm px-4 fw-bold">Ver Fatura</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

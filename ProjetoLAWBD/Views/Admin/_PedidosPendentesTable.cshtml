@@ -1,0 +1,98 @@
+﻿@model ProjetoLAWBD.ViewModels.AdminDashboardViewModel
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card shadow-sm stat-card">
+            <div class="card-body">
+                <h5 class="card-title stat-title">Total Utilizadores</h5>
+                <p class="card-text stat-value">@Model.TotalUtilizadores</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm stat-card">
+            <div class="card-body">
+                <h5 class="card-title stat-title">Vendedores Ativos</h5>
+                <p class="card-text stat-value">@Model.VendedoresAtivos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm stat-card">
+            <div class="card-body">
+                <h5 class="card-title stat-title">Anúncios Ativos</h5>
+                <p class="card-text stat-value">@Model.AnunciosAtivos</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card shadow-sm anuncio-card">
+    <div class="card-header">
+        <h4 class="mb-0">Pedidos de Vendedor Pendentes</h4>
+    </div>
+    <div class="card-body">
+        @if (Model.PedidosPendentes.Any())
+        {
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>NIF</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var vendedor in Model.PedidosPendentes)
+                    {
+                        <tr>
+                            <td>@vendedor.NomeFaturacao</td>
+                            <td>@vendedor.user?.Email</td>
+                            <td>@vendedor.NIF</td>
+                            <td class="text-end">
+                                <form asp-action="Aprovar" method="post" class="d-inline-block me-1"
+                                      data-ajax="true" data-ajax-method="POST" data-ajax-update="#mainDashboardContainer">
+                                    <input type="hidden" name="id" value="@vendedor.IdUtilizador" />
+                                    <input type="hidden" name="pagina" value="@Model.PaginaAtual" />
+                                    <button type="submit" class="btn btn-success btn-sm">Aprovar</button>
+                                </form>
+
+                                <form asp-action="Rejeitar" method="post" class="d-inline-block"
+                                      data-ajax="true" data-ajax-method="POST" data-ajax-update="#mainDashboardContainer">
+                                    <input type="hidden" name="id" value="@vendedor.IdUtilizador" />
+                                    <input type="hidden" name="pagina" value="@Model.PaginaAtual" />
+                                    <button type="submit" class="btn btn-danger btn-sm">Rejeitar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <nav>
+                <ul class="pagination justify-content-center">
+                    @for (int i = 1; i <= Model.TotalPaginas; i++)
+                    {
+                        <li class="page-item @(i == Model.PaginaAtual ? "active" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-pagina="@i"
+                               data-ajax="true" data-ajax-method="GET" data-ajax-update="#mainDashboardContainer">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+        else
+        {
+            <p class="text-muted text-center my-3">Não existem pedidos de vendedor pendentes.</p>
+        }
+    </div>
+</div>

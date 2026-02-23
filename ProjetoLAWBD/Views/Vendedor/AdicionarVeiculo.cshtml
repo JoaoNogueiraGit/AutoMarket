@@ -1,0 +1,209 @@
+﻿@model ProjetoLAWBD.ViewModels.VendedorAdicionarVeiculoViewModel
+@{
+    ViewData["Title"] = "Adicionar Novo Veículo";
+    Layout = "~/Views/Shared/_VendedorLayout.cshtml"; 
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="h2 pt-4" style="font-weight:bold">@ViewData["Title"]</h2>
+        <p class="text-muted">Preencha os detalhes e adicione imagens do seu veículo.</p>
+    </div>
+    <a asp-action="MeusVeiculos" class="btn btn-light">
+        <i class="fas fa-arrow-left me-1"></i> Voltar aos Meus Veículos
+    </a>
+</div>
+
+<div class="card anuncio-card shadow-sm">
+    <div class="card-body p-4 p-md-5">
+
+        <form asp-action="AdicionarVeiculo" method="post" enctype="multipart/form-data">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <h5>Detalhes do Veículo</h5>
+            <hr class="mt-2 mb-4">
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Marca *</label>
+                    <select id="marca-dropdown" asp-items="@(new SelectList(Model.Marcas, "IdMarca", "Nome"))" class="form-select">
+                        <option value="">-- Selecione uma Marca --</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Veiculo.IdModelo" class="form-label">Modelo *</label>
+                    <select asp-for="Veiculo.IdModelo" id="modelo-dropdown" class="form-select" disabled>
+                        <option value="">-- Primeiro, selecione uma Marca --</option>
+                        @foreach (var modelo in Model.Modelos)
+                        {
+                            <option value="@modelo.IdModelo" data-marca-id="@modelo.IdMarca">
+                                @modelo.Nome
+                            </option>
+                        }
+                    </select>
+                    <span asp-validation-for="Veiculo.IdModelo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label asp-for="Veiculo.PotenciaCV" class="form-label">Potência (cv) *</label>
+                    <input asp-for="Veiculo.PotenciaCV" class="form-control" type="tel" value=""/>
+                    <span asp-validation-for="Veiculo.PotenciaCV" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Veiculo.IdCaixa" class="form-label">Caixa *</label>
+                    <select asp-for="Veiculo.IdCaixa" asp-items="@(new SelectList(Model.Caixas, "IdCaixa", "Nome"))" class="form-select">
+                        <option value="">-- Selecione --</option>
+                    </select>
+                    <span asp-validation-for="Veiculo.IdCaixa" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Veiculo.IdCombustivel" class="form-label">Combustível *</label>
+                    <select asp-for="Veiculo.IdCombustivel" asp-items="@(new SelectList(Model.Combustiveis, "IdCombustivel", "Nome"))" class="form-select">
+                        <option value="">-- Selecione --</option>
+                    </select>
+                    <span asp-validation-for="Veiculo.IdCombustivel" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Veiculo.CilindradaCC" class="form-label">Cilindrada (cc)</label>
+                    <input asp-for="Veiculo.CilindradaCC" class="form-control" type="tel" value="" />
+                    <span asp-validation-for="Veiculo.CilindradaCC" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label asp-for="Veiculo.NumLugares" class="form-label">Lugares *</label>
+                    <input asp-for="Veiculo.NumLugares" class="form-control" type="tel" value="" />
+                    <span asp-validation-for="Veiculo.NumLugares" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Veiculo.NumPortas" class="form-label">Portas *</label>
+                    <input asp-for="Veiculo.NumPortas" class="form-control" type="tel" value="" />
+                    <span asp-validation-for="Veiculo.NumPortas" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Veiculo.IdCategoria" class="form-label">Categoria *</label>
+                    <select asp-for="Veiculo.IdCategoria" asp-items="@(new SelectList(Model.Categorias, "IdCategoria", "Nome"))" class="form-select">
+                        <option value="">-- Selecione --</option>
+                    </select>
+                    <span asp-validation-for="Veiculo.IdCategoria" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label asp-for="Veiculo.DataMatricula" class="form-label">Ano da Matrícula *</label>
+                    <input asp-for="Veiculo.DataMatricula" class="form-control" type="date" />
+                    <span asp-validation-for="Veiculo.DataMatricula" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Veiculo.KmTotal" class="form-label">Quilometragem Total *</label>
+                    <input asp-for="Veiculo.KmTotal" class="form-control" type="tel" value="" />
+                    <span asp-validation-for="Veiculo.KmTotal" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Veiculo.IdCor" class="form-label">Cor *</label>
+                    <select asp-for="Veiculo.IdCor" asp-items="@(new SelectList(Model.Cores, "IdCor", "Nome"))" class="form-select">
+                        <option value="">-- Selecione --</option>
+                    </select>
+                    <span asp-validation-for="Veiculo.IdCor" class="text-danger"></span>
+                </div>
+            </div>
+
+            
+
+            <h5 class="mt-5">Imagens do Veículo</h5>
+            <p class="text-muted">Adicione pelo menos 5 fotos. Arraste para reordenar, a primeira será a principal.</p>
+            <hr class="mt-2 mb-4">
+
+            <div class="mb-3">
+                <input type="file" name="FicheirosImagem" multiple />
+            </div>
+
+
+            <div class="text-end mt-5">
+                <a asp-action="MeusVeiculos" class="btn btn-light me-2">Cancelar</a>
+                <button type="submit" class="btn btn-dark">Guardar Veículo</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const marcaDropdown = document.getElementById('marca-dropdown');
+            const modeloDropdown = document.getElementById('modelo-dropdown');
+            const todosOsModelos = Array.from(modeloDropdown.options);
+
+            function atualizarModelos() {
+                const selectedMarcaId = marcaDropdown.value;
+                modeloDropdown.innerHTML = '';
+                modeloDropdown.appendChild(todosOsModelos[0]);
+
+                if (!selectedMarcaId) {
+                    modeloDropdown.disabled = true;
+                    return;
+                }
+
+                const modelosFiltrados = todosOsModelos.filter(function(option) {
+                    return option.dataset.marcaId === selectedMarcaId;
+                });
+
+                modelosFiltrados.forEach(function(modeloOption) {
+                    modeloDropdown.appendChild(modeloOption.cloneNode(true));
+                });
+
+                modeloDropdown.disabled = false;
+            }
+
+            marcaDropdown.addEventListener('change', atualizarModelos);
+            atualizarModelos();
+        });
+    </script>
+    <script>
+        // Espera que a página e os scripts do FilePond estejam carregados
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Regista o plugin de Previsão de Imagem
+            FilePond.registerPlugin(FilePondPluginImagePreview, FilePondPluginFileEncode);
+
+            // Encontra o <input>
+            const inputElement = document.querySelector('input[name="FicheirosImagem"]');
+
+            // Cria o FilePond
+            const pond = FilePond.create(inputElement, {
+                // Traduz as etiquetas
+                labelIdle: 'Arraste fotos para aqui ou <span class="filepond--label-action"> clique para escolher </span>',
+                labelInvalidField: 'O campo contém ficheiros inválidos',
+                labelFileWaitingForSize: 'A aguardar tamanho',
+                labelFileSizeNotAvailable: 'Tamanho não disponível',
+                labelFileLoading: 'A carregar',
+                labelFileLoadError: 'Erro ao carregar',
+                labelFileProcessing: 'A processar',
+                labelFileProcessingComplete: 'Processamento completo',
+                labelFileProcessingAborted: 'Processamento cancelado',
+                labelFileProcessingError: 'Erro ao processar',
+                labelTapToCancel: 'clique para cancelar',
+                labelTapToRetry: 'clique para tentar novamente',
+                labelTapToUndo: 'clique para anular',
+                credits: false,
+
+                // Diz ao FilePond para permitir reordenação (como no mockup)
+                allowReorder: true,
+
+                // Define a primeira imagem como "Capa"
+                // (Isto é um truque: o FilePond não define 'IsCapa',
+                //  mas o nosso Controller já trata disso ao pegar na primeira)
+                labelButtonRemoveItem: 'Remover'
+            });
+
+        });
+    </script>
+}

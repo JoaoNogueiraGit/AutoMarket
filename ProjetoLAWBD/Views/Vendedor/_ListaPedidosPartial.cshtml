@@ -1,0 +1,125 @@
+﻿@model ProjetoLAWBD.ViewModels.VendedorGerirPedidosViewModel
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <ul class="nav nav-tabs-custom">
+        <li class="nav-item">
+            <a class="nav-link @(Model.StatusAtual == "Pendentes" ? "active" : "")"
+               asp-action="GerirPedidos" asp-route-status="Pendentes">Pendentes (@Model.Pendentes)</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(Model.StatusAtual == "Aprovados" ? "active" : "")"
+               asp-action="GerirPedidos" asp-route-status="Aprovados">Aprovados (@Model.Aprovados)</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(Model.StatusAtual == "Historico" ? "active" : "")"
+               asp-action="GerirPedidos" asp-route-status="Historico">Histórico (@Model.Historico)</a>
+        </li>
+    </ul>
+</div>
+
+@if (Model.PedidosVisita.Any() || Model.PedidosReserva.Any())
+{
+    @foreach (var visita in Model.PedidosVisita)
+    {
+        <div class="card anuncio-card shadow-sm mb-3">
+            <div class="card-body d-flex flex-wrap justify-content-between align-items-center">
+                <div class="anuncio-info">
+                    <h6 class="fw-bold mb-1 text-primary">VISITA: @visita.Anuncio.Titulo</h6>
+                    <p class="small mb-1">Comprador: <strong>@visita.Comprador.user.NomeCompleto</strong></p>
+
+                    @if (Model.StatusAtual == "Historico")
+                    {
+                        // Lógica de cores para os badges do Histórico
+                        string estadoTexto = visita.EstadoVisita; // ou visita.EstadoVisita
+
+                        string classeCor = estadoTexto switch
+                        {
+                            "Vendido" => "text-success bg-success",    // Verde para sucesso
+                            "Rejeitada" => "text-danger bg-danger",    // Vermelho para rejeição
+                            "Expirada" => "text-warning bg-warning",   // Amarelo para expiração
+                            _ => "text-secondary bg-secondary"         // Cinzento para cancelados
+                        };
+
+                        <span class="badge @classeCor bg-opacity-10 px-2 py-1 mb-2 small fw-bold border">
+                            @estadoTexto.ToUpper()
+                        </span>
+                    }
+                    <p class="small text-muted mb-0">Data proposta: @visita.DataVisita.ToString("dd/MM/yyyy HH:mm")</p>
+                </div>
+
+                <div class="anuncio-botoes">
+                    <form asp-action="ProcessarPedido" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#container-pedidos" method="post">
+                        <input type="hidden" name="id" value="@visita.IdVisita" />
+                        <input type="hidden" name="tipo" value="Visita" />
+                        <input type="hidden" name="statusAtual" value="@Model.StatusAtual" />
+
+                        @if (Model.StatusAtual == "Pendentes")
+                        {
+                            <button name="acao" value="Aprovar" type="submit" class="btn btn-sm btn-success px-3">Aprovar</button>
+                            <button name="acao" value="Rejeitar" type="submit" class="btn btn-sm btn-outline-danger px-3">Rejeitar</button>
+                        }
+                        else if (Model.StatusAtual == "Aprovados")
+                        {
+                            <button name="acao" value="Cancelar" type="submit" class="btn btn-sm btn-danger px-3" onclick="return confirm('Cancelar visita?')">Cancelar</button>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+
+    @foreach (var reserva in Model.PedidosReserva)
+    {
+        <div class="card anuncio-card shadow-sm mb-3">
+            <div class="card-body d-flex flex-wrap justify-content-between align-items-center">
+                <div class="anuncio-info">
+                    <h6 class="fw-bold mb-1 text-info">RESERVA: @reserva.Anuncio.Titulo</h6>
+                    <p class="small mb-1">Comprador: <strong>@reserva.Comprador.user.NomeCompleto</strong></p>
+
+                    @if (Model.StatusAtual == "Historico")
+                    {
+                        string classeCor = reserva.EstadoReserva switch
+                        {
+                            "Rejeitada" => "text-danger bg-danger",
+                            "Expirada" => "text-warning bg-warning",
+                            "Vendido" => "text-success bg-success",
+                            _ => "text-secondary bg-secondary"
+                        };
+
+                        <span class="badge @classeCor bg-opacity-10 px-2 py-1 mb-2 small fw-bold border">
+                            @reserva.EstadoReserva.ToUpper()
+                        </span>
+                    }
+                    <p class="small text-muted mb-0">Pedido em: @reserva.DataPedido.ToString("dd/MM/yyyy")</p>
+                </div>
+
+                <div class="anuncio-botoes">
+                    <form asp-action="ProcessarPedido" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#container-pedidos" method="post">
+                        <input type="hidden" name="id" value="@reserva.IdReserva" />
+                        <input type="hidden" name="tipo" value="Reserva" />
+                        <input type="hidden" name="statusAtual" value="@Model.StatusAtual" />
+
+                        @if (Model.StatusAtual == "Pendentes")
+                        {
+                            <button name="acao" value="Aprovar" type="submit" class="btn btn-sm btn-success px-3">Aprovar</button>
+                            <button name="acao" value="Rejeitar" type="submit" class="btn btn-sm btn-outline-danger px-3">Rejeitar</button>
+                        }
+                        else if (Model.StatusAtual == "Aprovados")
+                        {
+                            <button name="acao" value="Cancelar" type="submit" class="btn btn-sm btn-danger px-3" onclick="return confirm('Cancelar reserva?')">Cancelar</button>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    }
+}
+else
+{
+    <div class="card anuncio-card shadow-sm">
+        <div class="card-body text-center">
+            <p class="text-muted mb-0">Não foram encontrados anúncios com o estado "@Model.StatusAtual".</p>
+        </div>
+    </div>
+}

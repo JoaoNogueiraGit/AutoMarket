@@ -1,0 +1,56 @@
+﻿@model ProjetoLAWBD.ViewModels.CriarAdminViewModel
+@{
+    ViewData["Title"] = "Novo Administrador";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml"; // Usa a moldura do Admin
+}
+
+<h1 class="mt-3">@ViewData["Title"]</h1>
+<p>Crie uma nova conta com privilégios de administrador.</p>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm anuncio-card">
+            <div class="card-body">
+                <form asp-action="CriarAdministrador" method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label"></label>
+                        <input asp-for="Username" class="form-control" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Criar Administrador</button>
+                    <a asp-action="GerirUtilizadores" class="btn btn-link text-muted">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

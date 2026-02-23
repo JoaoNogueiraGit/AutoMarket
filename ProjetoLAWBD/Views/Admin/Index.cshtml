@@ -1,0 +1,17 @@
+﻿@model ProjetoLAWBD.ViewModels.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="mt-3">Dashboard</h1>
+
+<hr />
+
+<div id="mainDashboardContainer">
+    @await Html.PartialAsync("_PedidosPendentesTable.cshtml", Model)
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
+}

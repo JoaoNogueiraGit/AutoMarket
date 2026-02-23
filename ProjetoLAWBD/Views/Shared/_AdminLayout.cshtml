@@ -1,0 +1,121 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
+@{
+    Layout = "~/Views/Shared/_DashboardLayoutBase.cshtml";
+
+    // Lógica para saber qual link está ativo
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var currentPage = ViewContext.RouteData.Values["page"]?.ToString();
+    bool isManagePage = currentPage?.StartsWith("/Account/Manage") ?? false;
+}
+
+@section Sidebar {
+    <nav class="col-md-4 col-lg-3 sidebar-vendedor">
+        <div class="sidebar-card"> 
+            
+            <!-- O Perfil do Utilizador (Admin) -->
+            <div class="user-profile text-center text-md-start mb-4">
+                <div class="user-avatar mb-2">
+                    <span class="avatar-placeholder">
+                        @{
+                            var name = User.Identity.Name ?? "A";
+                            var initial = name.Substring(0, 1).ToUpper();
+                        }
+                        <span>@initial</span>
+                    </span>
+                </div>
+                <div class="d-flex flex-column align-items-center">
+                    <h5>@User.Identity.Name</h5> 
+                    <span class="text-muted small">Administrador</span>
+                </div>
+            </div>
+
+            <!-- A Lista de Links -->
+            <ul class="nav flex-column nav-vendedor">
+                <li class="nav-item">
+                    <a class="nav-link @(currentAction == "Index" ? "active" : "")" 
+                       asp-controller="Admin" asp-action="Index">
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(currentAction == "GerirUtilizadores" ? "active" : "")" 
+                       asp-controller="Admin" asp-action="GerirUtilizadores">
+                        Gerir Utilizadores
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(currentAction == "GerirAnuncios" ? "active" : "")" 
+                       asp-controller="Admin" asp-action="GerirAnuncios">
+                        Gerir Anúncios
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(currentAction == "HistoricoAcoes" ? "active" : "")" 
+                       asp-controller="Admin" asp-action="HistoricoAcoes">
+                        Histórico de Ações
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(isManagePage ? "active" : "")" 
+                       asp-area="Identity" asp-page="/Account/Manage/Index">
+                        O Meu Perfil
+                    </a>
+                </li>
+                
+                @if (isManagePage)
+                {
+                    <ul class="nav flex-column nav-sub-menu">
+                        
+                        <li class="nav-item">
+                            <a class="nav-link @(currentPage == "/Account/Manage/Index" ? "active-sub" : "")"
+                               asp-area="Identity" asp-page="/Account/Manage/Index">
+                               Perfil
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link @(currentPage == "/Account/Manage/Email" ? "active-sub" : "")"
+                               asp-area="Identity" asp-page="/Account/Manage/Email">
+                               Email
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentPage == "/Account/Manage/ChangePassword" ? "active-sub" : "")"
+                               asp-area="Identity" asp-page="/Account/Manage/ChangePassword">
+                               Palavra-passe
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentPage == "/Account/Manage/TwoFactorAuthentication" ? "active-sub" : "")"
+                               asp-area="Identity" asp-page="/Account/Manage/TwoFactorAuthentication">
+                               Autenticação 2 Fatores
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link @(currentPage == "/Account/Manage/PersonalData" ? "active-sub" : "")"
+                               asp-area="Identity" asp-page="/Account/Manage/PersonalData">
+                               Dados Pessoais
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentPage == "/Account/Manage/ExternalLogins" ? "active-sub" : "")"
+                              asp-area="Identity" asp-page="/Account/Manage/ExternalLogins">
+                              Logins Externos
+                          </a>
+                        </li>
+                    </ul>
+                }
+            </ul>
+
+        </div>
+    </nav>
+}
+
+@RenderBody()
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}
+@section Styles {
+    @await RenderSectionAsync("Styles", required: false)
+}
