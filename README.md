@@ -8,23 +8,23 @@ Auto Market is a web-based platform designed to bridge the gap between private s
 
 ✨ **Key Features** <br>
 ---
-User Authentication: Secure sign-up and login for buyers and sellers.
+**User Authentication:** Secure sign-up and login for buyers and sellers.
 
-Ad Management: Sellers can create, edit, and delete vehicle listings (including image uploads, pricing, and technical specs).
+**Ad Management:** Sellers can create, edit, and delete vehicle listings (including image uploads, pricing, and technical specs).
 
-Advanced Search: Filter vehicles by brand, model, fuel type, year, and price range.
+**Advanced Search:** Filter vehicles by brand, model, fuel type, year, and price range.
 
-Favorites System: Users can save favorite brands to a personal "Wishlist" to recieve notifications when an ad with a car of that gets uploaded on the website.
+**Favorites System:** Users can save favorite brands to a personal "Wishlist" to recieve notifications when an ad with a car of that gets uploaded on the website.
 
 🛠 **Tech Stack** <br>
 ---
-Frontend: HTML, CSS, Javascript
+**Frontend:** HTML, CSS, Javascript
 
-Backend: C# .NET 9.0 with Entity Framewrok
+**Backend:** C# .NET 9.0 with Entity Framewrok
 
-Database: Relational Database SQL
+**Database:** Relational Database SQL
 
-Tools: Bootstrap, Ajax
+**Tools:** Bootstrap, Ajax
 
 🚀 **Getting Started** <br>
 ---
